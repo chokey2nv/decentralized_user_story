@@ -1,18 +1,25 @@
-import { configureStore } from '@reduxjs/toolkit'
-import middleware from 'application/flows'
-import infra from 'infrastructure'
-import walletCore from 'application/reducers.slices/wallet.core'
-import noticeCore from './reducers.slices/notice.core'
+import { configureStore } from "@reduxjs/toolkit";
+import infra from "infrastructure";
+import walletCore from "application/reducers.slices/wallet.core";
+import noticeCore from "application/reducers.slices/notice.core";
+import { LOCAL_STORAGE_PARAMS } from "utils/constance";
+import { Wallets } from "utils/types";
+import appMiddleware from "./flows/middleware";
 // ...
-
+const wallet = localStorage.getItem(LOCAL_STORAGE_PARAMS.wallet) as Wallets;
 const store = configureStore({
   reducer: {
     wallet: walletCore,
-    notice: noticeCore
+    notice: noticeCore,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(...middleware.map((f: any) => f(infra)))
-})
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(
+      ...appMiddleware.map((f: any) =>
+        f(infra.getInfrastructure(wallet || "metamask"))
+      )
+    ),
+});
 // Infer the `RootState` and `AppDispatch` types from the store itself
-export type RootState = ReturnType<typeof store.getState>
-export type AppDispatch = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 export default store;

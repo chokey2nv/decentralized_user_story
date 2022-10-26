@@ -3,7 +3,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 
-function HeaderDisconnected() {
+export function HeaderConnected(): JSX.Element {
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -30,4 +30,4 @@ function HeaderDisconnected() {
     </AppBar>
   );
 }
-export default HeaderDisconnected;
+export default HeaderConnected;

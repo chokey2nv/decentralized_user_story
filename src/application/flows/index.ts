@@ -1,2 +1,2 @@
-export {default as default} from './middleware';
+export * from './middleware';
 export * as flow from './actions';
