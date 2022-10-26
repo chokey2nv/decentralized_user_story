@@ -15,9 +15,9 @@ const Notice = () => {
     event?: React.SyntheticEvent | Event,
     reason?: SnackbarCloseReason
   ) => {
-    if (reason === "clickaway") {
-      return;
-    }
+    // if (reason === "clickaway") {
+    //   return;
+    // }
     dispatch(hideNotice);
     onClose && onClose();
   };
