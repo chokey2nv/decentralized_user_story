@@ -1,35 +1,45 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from 'application/store'
+import { AlertColor, SnackbarCloseReason } from "@mui/material";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "application/store";
+
 export interface NoticeState {
   open: boolean;
   message: any;
-  type: 'error' | 'warning' | 'success' | null | undefined
+  type: AlertColor | undefined;
+  onClose?: Function | undefined;
+  duration?: number;
 }
-export type DisplayNoticeState = Pick<NoticeState, 'type' | 'message'>
+export type DisplayNoticeState = Pick<NoticeState, "type" | "message">;
 const initialState: NoticeState = {
   open: false,
-  message: '',
-  type: null,
-}
+  message: "",
+  type: undefined,
+  onClose: undefined,
+  duration: 600,
+};
+export type NoticePayload = Omit<NoticeState, "open">;
 
 const noticeSlice = createSlice({
-  name: 'notice',
+  name: "notice",
   initialState,
   reducers: {
-    displayNotice: (state, action: PayloadAction<DisplayNoticeState>) => {
+    displayNotice: (state, action: PayloadAction<NoticePayload>) => {
       state = {
-        open : true,
-        ...action.payload
-      }
+        onClose: undefined,
+        open: true,
+        ...action.payload,
+      };
+      return state;
     },
     closeNotice: (state) => {
-      state = {...initialState}
-    }
+      state = { ...initialState };
+      return state;
+    },
   },
-})
+});
 
-export const {displayNotice, closeNotice} = noticeSlice.actions
+export const { displayNotice, closeNotice } = noticeSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
-export const selectNotice = (state: RootState) => state.notice
+export const selectNotice = (state: RootState) => state.notice;
 
 export default noticeSlice.reducer;

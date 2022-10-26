@@ -1,7 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from 'application/store'
-import { serializeFunction } from 'utils/common';
-import { Wallets } from 'utils/types';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "application/store";
+import { Wallets } from "utils/types";
 // Define a type for the slice state
 export interface WalletState {
   address: string;
@@ -11,8 +10,8 @@ export interface WalletState {
   symbol: string;
   web3?: any;
 }
-export type NetworkState = Omit<WalletState, 'address' | 'wallet'>;
-export type AddressState = Pick<WalletState, 'address' | 'balance'>;
+export type NetworkState = Omit<WalletState, "address" | "wallet">;
+export type AddressState = Pick<WalletState, "address" | "balance">;
 export type BalanceState = number;
 export type SymbolState = string;
 // Define the initial state using that type
@@ -22,45 +21,54 @@ const initialState: WalletState = {
   networkId: "",
   balance: 0,
   symbol: "",
-  web3: null,
-}
+};
 const walletSlice = createSlice({
-  name: 'wallet',
+  name: "wallet",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
     walletConnect: (state, action: PayloadAction<WalletState>) => {
-      state = action.payload
+      state = action.payload;
+      return state;
     },
-    walletDisconnect : (state) => {
-      state = {...initialState}
+    walletDisconnect: (state) => {
+      state = { ...initialState };
+      return state;
     },
     setNetwork: (state, action: PayloadAction<NetworkState>) => {
       state = {
         ...state,
-        ...action.payload
-      }
+        ...action.payload,
+      };
+      return state;
     },
     setAddress: (state, action: PayloadAction<AddressState>) => {
       state = {
-        ...state, 
-        ...action.payload
-      }
+        ...state,
+        ...action.payload,
+      };
+      return state;
     },
     setBalance: (state, action: PayloadAction<BalanceState>) => {
       state.balance = action.payload;
+      return state;
     },
     setSymbol: (state, action: PayloadAction<SymbolState>) => {
-      state.symbol = action.payload
-    }
+      state.symbol = action.payload;
+      return state;
+    },
   },
-})
+});
 
-export const { 
-  walletConnect, walletDisconnect, setNetwork, 
-  setAddress, setBalance, setSymbol
-} = walletSlice.actions
+export const {
+  walletConnect,
+  walletDisconnect,
+  setNetwork,
+  setAddress,
+  setBalance,
+  setSymbol,
+} = walletSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
-export const selectWallet = (state: RootState) => state.wallet
+export const selectWallet = (state: RootState) => state.wallet;
 
 export default walletSlice.reducer;

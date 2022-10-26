@@ -1,5 +1,5 @@
+import noticeMiddleware from "./notice.mid";
 import walletMiddleware from "./wallet.mid/indext";
 
-export default [
-  walletMiddleware
-];
+const appMiddleware = [walletMiddleware, noticeMiddleware];
+export default appMiddleware;

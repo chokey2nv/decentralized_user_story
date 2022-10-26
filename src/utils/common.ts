@@ -1,7 +1,6 @@
 export const serializeFunction = (func: Function) => func.toString();
 export const deserializeFunction = (funcString: string) => new Function('return ' + funcString)()
 export const serializeObject = (object: any) => {
-  console.log(object);
   const newObject: Record<string, any> = {};
   for (const key in object) {
     if (Object.prototype.hasOwnProperty.call(object, key)) {
