@@ -2,7 +2,6 @@ import { Middleware } from "@reduxjs/toolkit";
 import {
   CLOSE_NOTICE,
   ERROR_NOTICE,
-  hideNotice,
   INFO_NOTICE,
   SUCCESS_NOTICE,
   WARNING_NOTICE,

@@ -1,4 +1,4 @@
-import { AlertColor, SnackbarCloseReason } from "@mui/material";
+import { AlertColor } from "@mui/material";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "application/store";
 

@@ -1,10 +1,11 @@
 import React from "react";
-import { ArrowDropDown } from "@mui/icons-material";
-import { AppBar, IconButton, Stack, Toolbar } from "@mui/material";
+import { AppBar, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Container } from "@mui/system";
 import { selectWallet } from "application/reducers.slices/wallet.core";
 import { useSelector } from "react-redux";
+import HeaderConnected from "./header.connected";
+import ButtonDropdown from "views/components/base/button.custom/button.dropdown";
 const StyledRoot = styled("div")(() => ({
   display: "flex",
   padding: 10,
@@ -30,55 +31,28 @@ const StyledStack = styled(Stack)(() => ({
   marginRight: 5,
   justifyContent: "flex-start",
 }));
-const StyledIconButton = styled(IconButton)(() => ({
-  borderRadius: 6,
-  padding: "12px 16px",
-  border: "1px solid #F2F5F8",
-  gap: 10,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  cursor: "pointer",
-}));
-const StyledMenuIcon = styled("img")(() => ({
-  width: 24,
-  height: 24,
-}));
-const StyledMenuIconText = styled("span")(() => ({
-  fontSfamily: "Cera Pro",
-  fontSize: 16,
-  fontWeight: 500,
-  textAlign: "left",
-  color: "black",
-}));
 const StyledConnectionContainer = styled("div")(() => ({
   color: "black",
 }));
 const Header = () => {
   const { address } = useSelector(selectWallet);
-  // if (address) return <HeaderConnected/>;
-  // return <HeaderDisconnected />;
   return (
     <AppBar position="static" elevation={1}>
       <Container maxWidth="xl" style={{ background: "#fff", padding: 0 }}>
         <Toolbar disableGutters>
           <StyledRoot>
             <StyledCompanyContainer>
-              <Logo src="/assets/logo.svg" />
+              <Logo src="/assets/logo.svg" alt="logo" />
               <StyledStack direction="column">
                 <ImageContainer>
-                  <img src="/assets/rigelprotocol.svg" />
+                  <img src="/assets/rigelprotocol.svg" alt="rigelprotocol" />
                 </ImageContainer>
                 <Text>Defi Story</Text>
               </StyledStack>
-              <StyledIconButton>
-                <StyledMenuIcon src="/assets/menu.svg" />
-                <StyledMenuIconText>DApps</StyledMenuIconText>
-                <ArrowDropDown />
-              </StyledIconButton>
+              <ButtonDropdown iconSrc="/assets/menu.svg" text="DApps" />
             </StyledCompanyContainer>
             <StyledConnectionContainer>
-              {address ? "isConnected" : "is not connected"}
+              {address ? <HeaderConnected /> : "is not connected"}
             </StyledConnectionContainer>
           </StyledRoot>
         </Toolbar>
