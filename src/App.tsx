@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useAppDispatch } from "application/hook";
 import { connectWallet } from "application/flows/actions";
