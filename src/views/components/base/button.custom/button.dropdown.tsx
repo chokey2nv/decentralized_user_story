@@ -4,7 +4,8 @@ import ButtonCustom from ".";
 interface ButtonDropdownProps {
   iconSrc: string;
   text: string;
+  onClick: React.MouseEventHandler
 }
-export default function ButtonDropdown({iconSrc, text}: ButtonDropdownProps){
-  return <ButtonCustom iconSrc={iconSrc} text={text} rightIconSrc="/assets/arrow_dropdown.svg"/>
+export default function ButtonDropdown({iconSrc, text, onClick}: ButtonDropdownProps){
+  return <ButtonCustom onClick={onClick} iconSrc={iconSrc} text={text} rightIconSrc="/assets/arrow_dropdown.svg"/>
 }

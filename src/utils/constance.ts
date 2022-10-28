@@ -7,31 +7,31 @@ export const LOCAL_STORAGE_PARAMS = {
 };
 export const NETWORKS: Network[] = [
   {
-    name: "Binance",
+    label: "Binance",
     id: "56",
-    logoName: "binance",
+    name: "binance",
     symbol: "BNB",
     decimals: 18,
   },
   {
-    name: "Binance Test",
+    label: "Binance Test",
     id: "97",
-    logoName: "binance",
+    name: "binance",
     symbol: "BNB",
     decimals: 18,
   },
   {
-    name: "Polygon",
+    label: "Polygon",
     id: "137",
     symbol: "MATIC",
-    logoName: "polygon",
+    name: "polygon",
     decimals: 18,
   },
   {
-    name: "Polygon Test",
+    label: "Polygon Test",
     id: "80001",
     symbol: "MATIC",
-    logoName: "polygon",
+    name: "polygon",
     decimals: 18,
   },
 ];

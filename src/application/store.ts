@@ -5,12 +5,14 @@ import noticeCore from "application/reducers.slices/notice.core";
 import { LOCAL_STORAGE_PARAMS } from "utils/constance";
 import { Wallets } from "utils/types";
 import appMiddleware from "./flows/middleware";
+import dialogCore from "./reducers.slices/dialog.core";
 // ...
 const wallet = localStorage.getItem(LOCAL_STORAGE_PARAMS.wallet) as Wallets;
 const store = configureStore({
   reducer: {
     wallet: walletCore,
     notice: noticeCore,
+    dialogbox: dialogCore,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(

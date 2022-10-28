@@ -1,4 +1,4 @@
-export default {
+const utils = {
   shortAddress(address: string): string {
     if (!address) return "...";
     return (
@@ -8,3 +8,4 @@ export default {
     );
   },
 };
+export default utils;

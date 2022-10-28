@@ -4,6 +4,7 @@ import { useAppDispatch } from "application/hook";
 import { connectWallet } from "application/flows/actions";
 import Header from "views/components/views/headers";
 import Notice from "views/components/base/snackbar";
+import CustomDialog from "views/components/base/dialog";
 
 function App() {
   const dispatch = useAppDispatch();
@@ -17,6 +18,7 @@ function App() {
           <Route path="/" element={<Header />} />
         </Routes>
       </BrowserRouter>
+      <CustomDialog />
       <Notice />
     </div>
   );

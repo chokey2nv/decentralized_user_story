@@ -4,7 +4,7 @@ import React from "react";
 export const StyledIconButton = styled(IconButton)(() => ({
   borderRadius: 6,
   padding: "12px 16px",
-  border: "1px solid #F2F5F8",
+  border: "1px solid #DEE6ED",
   gap: 10,
   display: "flex",
   justifyContent: "center",
@@ -28,6 +28,7 @@ interface ButtonCustomProps {
   iconSrc: string;
   text?: string;
   rightIconSrc?: string;
+  onClick: React.MouseEventHandler;
   classes?: {
     iconButton?: Partial<IconButtonClasses>;
   };
@@ -42,9 +43,10 @@ export default function ButtonCustom({
   rightIconSrc,
   classes,
   classNames,
+  onClick,
 }: ButtonCustomProps) {
   return (
-    <StyledIconButton classes={classes?.iconButton}>
+    <StyledIconButton classes={classes?.iconButton} onClick={onClick}>
       {iconSrc && (
         <StyledMenuIcon className={classNames?.imgIcon} src={iconSrc} />
       )}
