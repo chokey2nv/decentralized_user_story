@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import HeaderConnected from "./header.connected";
 import ButtonDropdown from "views/components/base/button.custom/button.dropdown";
 import DappsDropdown from "./Dapps";
+import HeaderDisConnected from "./header.disconnected";
 const StyledRoot = styled("div")(() => ({
   display: "flex",
   padding: 10,
@@ -34,6 +35,8 @@ const StyledStack = styled(Stack)(() => ({
 }));
 const StyledConnectionContainer = styled("div")(() => ({
   color: "black",
+  display: "flex",
+  alignItems: "center",
 }));
 const Header = () => {
   const { address } = useSelector(selectWallet),
@@ -67,7 +70,7 @@ const Header = () => {
               />
             </StyledCompanyContainer>
             <StyledConnectionContainer>
-              {address ? <HeaderConnected /> : "is not connected"}
+              {address ? <HeaderConnected /> : <HeaderDisConnected />}
             </StyledConnectionContainer>
           </StyledRoot>
         </Toolbar>

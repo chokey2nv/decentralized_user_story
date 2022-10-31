@@ -52,20 +52,22 @@ export default function CustomDialog() {
       if (onClose) onClose();
       dispatch(hideDialogBoxAction);
     };
-  return (
-    <Dialog
-      classes={{
-        paper: classNames(classes.dialogPaper),
-      }}
-      open={Boolean(open)}
-      onClose={handleOnClose}
-    >
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <IconButton onClick={() => dispatch(hideDialogBoxAction)}>
-          <Close />
-        </IconButton>
-      </div>
-      {Component && React.createElement(Component)}
-    </Dialog>
-  );
+  if (Boolean(open))
+    return (
+      <Dialog
+        classes={{
+          paper: classNames(classes.dialogPaper),
+        }}
+        open={Boolean(open)}
+        onClose={handleOnClose}
+      >
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <IconButton onClick={() => dispatch(hideDialogBoxAction)}>
+            <Close />
+          </IconButton>
+        </div>
+        {Component && React.createElement(Component)}
+      </Dialog>
+    );
+  else return null;
 }

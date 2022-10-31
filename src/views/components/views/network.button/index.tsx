@@ -1,4 +1,5 @@
-import { showDialogAction } from "application/flows/actions/dialogbox.action";
+import { changeNetworkAction } from "application/flows/actions";
+import { hideDialogBoxAction, showDialogAction } from "application/flows/actions/dialogbox.action";
 import { useAppDispatch } from "application/hook";
 import React from "react";
 import ButtonDropdown from "views/components/base/button.custom/button.dropdown";
@@ -13,10 +14,14 @@ export default function NetworkButton({ name, logoName }: NetworkButtonProps) {
   function onClickHandler() {
     dispatch(
       showDialogAction({
-        component: () => <NetworkSelector />,
+        component: () => <NetworkSelector selectNetwork={selectNetwork}/>,
       })
     );
   }
+  function selectNetwork (networkId: string){
+    dispatch(changeNetworkAction(networkId));
+    dispatch(hideDialogBoxAction);
+  };
   return (
     <ButtonDropdown
       onClick={onClickHandler}

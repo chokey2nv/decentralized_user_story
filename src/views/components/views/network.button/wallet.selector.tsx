@@ -1,8 +1,7 @@
 import { makeStyles } from "@mui/styles";
-import { selectWallet } from "application/reducers.slices/wallet.core";
 import classNames from "classnames";
-import { useSelector } from "react-redux";
-import { NETWORKS } from "utils/constance";
+import { WALLETS } from "utils/constance";
+import { Wallets } from "utils/types";
 
 const useStyles = makeStyles(() => ({
   midiumlogo: {
@@ -69,28 +68,24 @@ const useStyles = makeStyles(() => ({
     border: `solid 2px green`,
   },
 }));
-export function NetworkSelector({
-  selectNetwork,
+export function WalletSelector({
+  onWalletSelect,
 }: {
-  selectNetwork: (network: string) => void;
+  onWalletSelect: (wallet: Wallets) => void;
 }) {
-  const classes = useStyles(),
-    { networkId } = useSelector(selectWallet);
+  const classes = useStyles();
   return (
     <div className={classes.root}>
       <div className={classes.heading}>Choose a Network to connect to</div>
-      {NETWORKS.map((item, index: number) => {
+      {WALLETS.map((item, index: number) => {
         return (
           <div
             key={index}
-            className={classNames(
-              networkId === item.id ? classes.selected : "",
-              classes.selectBorder
-            )}
-            onClick={() => selectNetwork(item.id)}
+            className={classes.selectBorder}
+            onClick={() => onWalletSelect(item.name)}
           >
             <img
-              src={`/assets/networks/${item.name}.svg`}
+              src={`/assets/wallets/${item.name}.svg`}
               className={classNames(classes.midiumlogo)}
               alt={item.name}
             />
@@ -98,30 +93,8 @@ export function NetworkSelector({
           </div>
         );
       })}
-      <div className={classes.inforBox}>
-        <div className={classes.inforText}>
-          By connecting a wallet, you agree to RigelProtocol’s{" "}
-          <a
-            target="_blank"
-            href="https://www.rigelprotocol.com/terms-and-condition.html"
-            rel="noreferrer"
-            className={classes.link}
-          >
-            Terms of Service
-          </a>{" "}
-          and acknowledge that you have read and understand the RigelProtocol{" "}
-          <a
-            target="_blank"
-            href="https://www.rigelprotocol.com/privacy-policy.html"
-            rel="noreferrer"
-            className={classes.link}
-          >
-            Privacy Policy
-          </a>
-        </div>
-      </div>
     </div>
   );
 }
 
-export default NetworkSelector;
+export default WalletSelector;

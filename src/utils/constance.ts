@@ -1,4 +1,4 @@
-import { NetowrkExplorer, Network } from "./types";
+import { NetowrkExplorer, Network, Wallet } from "./types";
 export const APP_NAME = "user_story";
 export const LOCAL_STORAGE_PARAMS = {
   wallet: `${APP_NAME}_wallet`,
@@ -23,6 +23,16 @@ export const PolygonExplorer = (base: string): NetowrkExplorer => ({
     blockPath: "/block/[block]",
   },
 });
+export const WALLETS: Wallet[] = [
+  {
+    label: "Metamask",
+    name: "metamask",
+  },
+  {
+    label: "Trust Wallet",
+    name: "trustWallet",
+  },
+];
 export const NETWORKS: Network[] = [
   {
     label: "Binance",

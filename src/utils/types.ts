@@ -2,6 +2,10 @@ import { MiddlewareAPI } from "@reduxjs/toolkit";
 import { Infra } from "infrastructure";
 
 export type Wallets = "binance" | "metamask" | "trustWallet" | "walletConnect";
+export interface Wallet {
+  label: string;
+  name: Wallets
+}
 export type ExplorerName = "Etherscan" | "Polygonscan" | "Bscscan" | "Explorer";
 export type NetowrkExplorerPath = "address" | "transaction" | "block";
 export interface NetowrkExplorer {

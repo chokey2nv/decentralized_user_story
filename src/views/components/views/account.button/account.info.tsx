@@ -190,7 +190,7 @@ function AccountInfo() {
                 alignItems: "center",
               }}
             > */}
-            <img src={`/assets/wallets/${wallet}.svg`} />
+            <img src={`/assets/wallets/${wallet}.svg`} alt="wallet" />
             {String(address).toUpperCase()}
             {/* </div> */}
             <Tooltip
@@ -214,6 +214,7 @@ function AccountInfo() {
                 <img
                   style={{ height: "24px", width: "24px", marginRight: "4px" }}
                   src="/assets/routesquare-light.svg"
+                  alt="explorer"
                 />
                 <div
                   style={{

@@ -9,7 +9,7 @@ import CustomDialog from "views/components/base/dialog";
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(connectWalletAction);
+    dispatch(connectWalletAction());
   }, [dispatch]);
   return (
     <div className="App">

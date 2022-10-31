@@ -98,7 +98,7 @@ function DappsDropdown({ anchorEl, handleCloseEvent }: DappsDropdownProps) {
       className={classes.menu}
     >
       <div>
-        {dropDownData.map((item): any => {
+        {dropDownData.map((item, index): any => {
           const isSameRoute = item.link === "/",
             itemProps: Partial<{
               target: string;
@@ -111,7 +111,7 @@ function DappsDropdown({ anchorEl, handleCloseEvent }: DappsDropdownProps) {
             itemProps.href = item.link;
           }
           return (
-            <MenuItem>
+            <MenuItem key={index + item.link}>
               <ListItem {...itemProps} className={classes.menuItem}>
                 <Stack>
                   <div className={classes.textUpper}>{item.header}</div>
