@@ -1,5 +1,5 @@
 import { makeStyles } from "@mui/styles";
-import { changeNetwork } from "application/flows/actions";
+import { changeNetworkAction } from "application/flows/actions";
 import { hideDialogBoxAction } from "application/flows/actions/dialogbox.action";
 import { useAppDispatch } from "application/hook";
 import { selectWallet } from "application/reducers.slices/wallet.core";
@@ -77,7 +77,7 @@ export function NetworkSelector() {
     dispatch = useAppDispatch(),
     { networkId } = useSelector(selectWallet),
     selectNetwork = (networkId: string) => {
-      dispatch(changeNetwork(networkId));
+      dispatch(changeNetworkAction(networkId));
       dispatch(hideDialogBoxAction);
     };
   return (

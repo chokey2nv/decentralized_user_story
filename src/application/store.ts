@@ -17,7 +17,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
       ...appMiddleware.map((f: any) =>
-        f(infra.getInfrastructure(wallet || "metamask"))
+        f(infra.getInfrastructure(wallet))
       )
     ),
 });

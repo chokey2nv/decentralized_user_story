@@ -1,5 +1,5 @@
 import { MiddlewareAPI } from "@reduxjs/toolkit";
-import { connectWallet } from "application/flows/actions";
+import { connectWalletAction } from "application/flows/actions";
 import { showErrorNotice } from "application/flows/actions/notice.action";
 import { Infra } from "infrastructure";
 import { LOCAL_STORAGE_PARAMS, NETWORKS } from "utils/constance";
@@ -19,7 +19,7 @@ export const changeNetworkFlow = async (
       params: [{ chainId: Web3.utils.toHex(networkId) }],
     });
     localStorage.setItem(LOCAL_STORAGE_PARAMS.networkId, networkId);
-    dispatch(connectWallet);
+    dispatch(connectWalletAction);
   } catch (error: any) {
     if (error.code === 4902) {
       try {

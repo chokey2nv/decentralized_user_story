@@ -1,5 +1,5 @@
 import { MiddlewareAPI } from "@reduxjs/toolkit";
-import { changeNetwork } from "application/flows/actions";
+import { changeNetworkAction } from "application/flows/actions";
 import {
   showErrorNotice,
   showSuccessNotice,
@@ -16,6 +16,7 @@ export const connectWalletFlow = async (
   { dispatch }: MiddlewareAPI,
   action: any = undefined
 ) => {
+  if (!infra) return;
   let { supportedIds, log, web3, accounts, wallet } = await infra;
   try {
     dispatch(showWarningNotice({ message: `Connecting with ${wallet}` }));
@@ -24,14 +25,14 @@ export const connectWalletFlow = async (
       LOCAL_STORAGE_PARAMS.networkId
     ) as Wallets;
     if (!accounts) accounts = await web3.eth.getAccounts();
-    const address = accounts[0],
+    const address = accounts?.[0],
       networkId = await web3.eth.net.getId();
     if (!supportedIds.includes(String(networkId))) {
       const newNetworkId = supportedIds.includes(lastNetworkId)
           ? lastNetworkId
           : supportedIds[0],
         network = NETWORKS.find((item) => item.id === newNetworkId);
-      dispatch(changeNetwork(newNetworkId));
+      dispatch(changeNetworkAction(newNetworkId));
       dispatch(
         showErrorNotice({
           message: `Unsupported network, switch to ${network?.name}`,
@@ -46,7 +47,7 @@ export const connectWalletFlow = async (
       dispatch(
         walletConnect({
           wallet,
-          address,
+          address: address as string,
           networkId: String(networkId),
           balance: Number(balance),
           symbol: network?.symbol as string,

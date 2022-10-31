@@ -1,6 +1,9 @@
 import { styled } from "@mui/material";
+import { showDialogAction } from "application/flows/actions/dialogbox.action";
+import { useAppDispatch } from "application/hook";
 import React from "react";
 import utils from "utils";
+import AccountInfo from "./account.info";
 
 const StyledBalanceDiv = styled("div")(() => ({
   background: "#F2F5F8",
@@ -35,8 +38,16 @@ export default function AccountButton({
   address,
   wallet,
 }: AccountButtonProps) {
+  const dispatch = useAppDispatch();
+  function openAccountInfo() {
+    dispatch(
+      showDialogAction({
+        component: AccountInfo,
+      })
+    );
+  }
   return (
-    <StyledBalanceAddressBox>
+    <StyledBalanceAddressBox onClick={openAccountInfo}>
       <StyledBalanceDiv>{`${balance} ${symbol}`}</StyledBalanceDiv>
       <StyledAddress>{utils.shortAddress(address as string)}</StyledAddress>
       <Image src={`/assets/wallets/${wallet}.svg`} alt="wallet" />

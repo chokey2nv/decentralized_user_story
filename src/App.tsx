@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useAppDispatch } from "application/hook";
-import { connectWallet } from "application/flows/actions";
+import { connectWalletAction } from "application/flows/actions";
 import Header from "views/components/views/headers";
 import Notice from "views/components/base/snackbar";
 import CustomDialog from "views/components/base/dialog";
@@ -9,7 +9,7 @@ import CustomDialog from "views/components/base/dialog";
 function App() {
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(connectWallet);
+    dispatch(connectWalletAction);
   }, [dispatch]);
   return (
     <div className="App">

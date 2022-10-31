@@ -57,7 +57,7 @@ const Header = () => {
                 <Text>Defi Story</Text>
               </StyledStack>
               <ButtonDropdown
-                onClick={handleAppClick} //TODO:
+                onClick={handleAppClick}
                 iconSrc="/assets/menu.svg"
                 text="DApps"
               />
