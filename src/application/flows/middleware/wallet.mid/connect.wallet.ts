@@ -13,16 +13,18 @@ import Web3 from "web3";
 
 export const connectWalletFlow = async (
   infra: Promise<Infra>,
-  { dispatch }: MiddlewareAPI,
+  { dispatch, getState }: MiddlewareAPI,
   action: any = undefined
 ) => {
   const fWallet =
     action.payload?.wallet || localStorage.getItem(LOCAL_STORAGE_PARAMS.wallet);
-  let infrastructure = await infra;
+  let infrastructure = await infra,
+    networkId: string | undefined = undefined;
   if (fWallet) {
     infrastructure = (await AppInfrastructure.getInfrastructure(
       fWallet
     )) as Infra;
+    networkId = getState().wallet?.networkId;
   }
   if (!infrastructure) return;
   let { supportedIds, log, web3, accounts, wallet } = infrastructure || {};
@@ -33,8 +35,8 @@ export const connectWalletFlow = async (
       LOCAL_STORAGE_PARAMS.networkId
     ) as Wallets;
     if (!accounts) accounts = await web3.eth.getAccounts();
-    const address = accounts?.[0],
-      networkId = await web3.eth.net.getId();
+    const address = accounts?.[0];
+    if (!networkId) networkId = String(await web3.eth.net.getId());
     if (!supportedIds.includes(String(networkId))) {
       const newNetworkId = supportedIds.includes(lastNetworkId)
           ? lastNetworkId

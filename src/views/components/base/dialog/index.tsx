@@ -42,7 +42,7 @@ const styles = makeStyles(() => ({
 }));
 export default function CustomDialog() {
   const classes = styles(),
-    { open, onClose, component: Component } = useSelector(selectDialog),
+    { open, onClose, component: Component, closeButton } = useSelector(selectDialog),
     dispatch = useAppDispatch(),
     handleOnClose = (
       event: Event,
@@ -61,11 +61,11 @@ export default function CustomDialog() {
         open={Boolean(open)}
         onClose={handleOnClose}
       >
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        {closeButton && <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <IconButton onClick={() => dispatch(hideDialogBoxAction)}>
             <Close />
           </IconButton>
-        </div>
+        </div>}
         {Component && React.createElement(Component)}
       </Dialog>
     );

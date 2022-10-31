@@ -9,12 +9,14 @@ export interface DialogboxState {
   open: boolean;
   component: DialogComponent | undefined;
   onClose?: Function | undefined;
+  closeButton?: Boolean;
 }
-export type DialogOpenState = Omit<DialogboxState, 'open'>
+export type DialogOpenState = Omit<DialogboxState, "open">;
 const initialState: DialogboxState = {
   open: false,
   component: undefined,
   onClose: undefined,
+  closeButton: true
 };
 const dialogboxSlice = createSlice({
   name: "dialogbox",

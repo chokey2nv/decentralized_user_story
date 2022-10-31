@@ -2,7 +2,7 @@ import { MiddlewareAPI } from "@reduxjs/toolkit";
 import { connectWalletAction } from "application/flows/actions";
 import { showErrorNotice } from "application/flows/actions/notice.action";
 import AppInfrastructure, { Infra } from "infrastructure";
-import { LOCAL_STORAGE_PARAMS, NETWORKS } from "utils/constance";
+import { NETWORKS } from "utils/constance";
 import Web3 from "web3";
 
 export const changeNetworkFlow = async (
@@ -11,9 +11,11 @@ export const changeNetworkFlow = async (
   action: any = undefined
 ) => {
   let infrastructure = await infra;
-  const {networkId, wallet} = action?.payload;
-  if(wallet){
-    infrastructure = (await AppInfrastructure.getInfrastructure(wallet)) as Infra;
+  const { networkId, wallet } = action?.payload;
+  if (wallet) {
+    infrastructure = (await AppInfrastructure.getInfrastructure(
+      wallet
+    )) as Infra;
   }
   const { log } = infrastructure;
   try {
@@ -22,7 +24,6 @@ export const changeNetworkFlow = async (
       method: "wallet_switchEthereumChain",
       params: [{ chainId: Web3.utils.toHex(networkId) }],
     });
-    localStorage.setItem(LOCAL_STORAGE_PARAMS.networkId, networkId);
     dispatch(connectWalletAction(wallet));
   } catch (error: any) {
     if (error.code === 4902) {

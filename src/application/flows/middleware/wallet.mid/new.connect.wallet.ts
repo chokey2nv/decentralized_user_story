@@ -1,15 +1,15 @@
 import { MiddlewareAPI } from "@reduxjs/toolkit";
-import { changeNetworkAction } from "application/flows/actions";
+import {
+  changeNetworkAction,
+  connectWalletAction,
+} from "application/flows/actions";
 import { hideDialogBoxAction } from "application/flows/actions/dialogbox.action";
 import {
   showErrorNotice,
-  showSuccessNotice,
   showWarningNotice,
 } from "application/flows/actions/notice.action";
-import { walletConnect } from "application/reducers.slices/wallet.core";
 import AppInfrastructure, { Infra } from "infrastructure";
 import { NETWORKS } from "utils/constance";
-import Web3 from "web3";
 
 export const newWalletConnectionFlow = async (
   _: Promise<Infra>,
@@ -18,8 +18,6 @@ export const newWalletConnectionFlow = async (
 ) => {
   const { wallet } = action.payload || {},
     networkId = getState().wallet?.networkId;
-  console.log(networkId, wallet);
-  console.log("######################");
   let infra = await AppInfrastructure.getInfrastructure(wallet);
   if (!infra) {
     dispatch(
@@ -27,12 +25,10 @@ export const newWalletConnectionFlow = async (
     );
     return;
   }
-  let { log, web3, accounts } = infra;
+  let { log, web3 } = infra;
   try {
     dispatch(showWarningNotice({ message: `Connecting with ${wallet}` }));
-    if (!accounts) accounts = await web3.eth.getAccounts();
-    const address = accounts?.[0],
-      connectedNetworkId = await web3.eth.net.getId(),
+    const connectedNetworkId = await web3.eth.net.getId(),
       network = NETWORKS.find((item) => item.id === networkId),
       connectedNetwork = NETWORKS.find(
         (item) => item.id === String(connectedNetworkId)
@@ -46,22 +42,7 @@ export const newWalletConnectionFlow = async (
         })
       );
     } else {
-      const BN = Web3.utils.toBN,
-        balance = BN(await web3.eth.getBalance(address))
-          .div(BN(10 ** Number(network?.decimals)))
-          .toString();
-      dispatch(
-        walletConnect({
-          wallet,
-          address: address as string,
-          networkId: String(networkId),
-          balance: Number(balance),
-          symbol: network?.symbol as string,
-        })
-      );
-      dispatch(
-        showSuccessNotice({ message: `Successfully connection with ${wallet}` })
-      );
+      dispatch(connectWalletAction(wallet));
     }
     dispatch(hideDialogBoxAction);
   } catch (error) {
