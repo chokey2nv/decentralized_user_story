@@ -4,6 +4,7 @@ import { AccountBalanceWalletOutlined } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import { useAppDispatch } from "application/hook";
 import {
+  setArrowBackTextAction,
   setDialogComponentAction,
   showDialogAction,
 } from "application/flows/actions/dialogbox.action";
@@ -14,6 +15,7 @@ import {
   newConnectionAction,
   setNetworkIdAction,
 } from "application/flows/actions";
+import { DialogOpenState } from "application/reducers.slices/dialog.core";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -35,10 +37,11 @@ const useStyles = makeStyles(() => ({
 export function HeaderDisConnected() {
   const classes = useStyles(),
     dispatch = useAppDispatch();
-  function connectToNetwork() {
+  function connectToNetwork(options?: DialogOpenState) {
     dispatch(
       showDialogAction({
         component: () => <NetworkSelector selectNetwork={selectNetwork} />,
+        ...options,
       })
     );
   }
@@ -48,6 +51,14 @@ export function HeaderDisConnected() {
       setDialogComponentAction(() => (
         <WalletSelector onWalletSelect={selectWallet} />
       ))
+    );
+    dispatch(
+      setArrowBackTextAction({
+        text: "Choose network",
+        action: () => {
+          connectToNetwork();
+        },
+      })
     );
   }
   const selectWallet = (wallet: Wallets) => {
@@ -59,7 +70,7 @@ export function HeaderDisConnected() {
         variant="contained"
         color="primary"
         className={classes.connectionBtn}
-        onClick={connectToNetwork}
+        onClick={() => connectToNetwork()}
       >
         <div> Connect Wallet </div>
         <AccountBalanceWalletOutlined style={{ marginLeft: 8 }} />

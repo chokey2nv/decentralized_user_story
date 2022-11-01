@@ -1,22 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "application/store";
-import { ComponentClass, FunctionComponent } from "react";
+import React, { ComponentClass, FunctionComponent } from "react";
 export type DialogComponent =
   | string
   | FunctionComponent<any>
   | ComponentClass<any, any>;
-export interface DialogboxState {
+export interface BackArrow {
+  text: string;
+  action?: React.MouseEventHandler<HTMLButtonElement> 
+}
+  export interface DialogboxState {
   open: boolean;
-  component: DialogComponent | undefined;
-  onClose?: Function | undefined;
+  component?: DialogComponent;
+  onClose?: Function;
   closeButton?: Boolean;
+  closeButtonComponent?: DialogComponent;
+  backArrow?: BackArrow;
 }
 export type DialogOpenState = Omit<DialogboxState, "open">;
 const initialState: DialogboxState = {
   open: false,
   component: undefined,
   onClose: undefined,
-  closeButton: true
+  closeButton: true,
+  closeButtonComponent: undefined,
+  backArrow: undefined,
 };
 const dialogboxSlice = createSlice({
   name: "dialogbox",
@@ -25,13 +33,25 @@ const dialogboxSlice = createSlice({
   reducers: {
     openDialog: (state, action: PayloadAction<DialogOpenState>) => {
       state = {
-        ...action.payload,
         open: true,
+        closeButton: true,
+        ...action.payload,
       };
       return state;
     },
     setComponent: (state, action: PayloadAction<DialogComponent>) => {
       state.component = action.payload;
+      return state;
+    },
+    setCloseButtonComponent: (
+      state,
+      action: PayloadAction<DialogComponent>
+    ) => {
+      state.closeButtonComponent = action.payload;
+      return state;
+    },
+    setArrowBackArrow(state, action: PayloadAction<BackArrow>){
+      state.backArrow = action.payload;
       return state;
     },
     closeDialog: (state) => {
@@ -41,7 +61,13 @@ const dialogboxSlice = createSlice({
   },
 });
 
-export const { openDialog, setComponent, closeDialog } = dialogboxSlice.actions;
+export const {
+  openDialog,
+  setComponent,
+  closeDialog,
+  setCloseButtonComponent,
+  setArrowBackArrow,
+} = dialogboxSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectDialog = (state: RootState) => state.dialogbox;
 
