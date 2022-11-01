@@ -1,37 +1,69 @@
-import { Network } from "./types";
+import { NetowrkExplorer, Network, Wallet } from "./types";
 export const APP_NAME = "user_story";
 export const LOCAL_STORAGE_PARAMS = {
   wallet: `${APP_NAME}_wallet`,
   address: `${APP_NAME}_address`,
   networkId: `${APP_NAME}_networkId`,
 };
+export const BSCExplorer = (base: string): NetowrkExplorer => ({
+  label: "Bscscan",
+  url: {
+    base,
+    addressPath: "/address/[address]",
+    txPath: "/tx/[tx]",
+    blockPath: "/block/[block]",
+  },
+});
+export const PolygonExplorer = (base: string): NetowrkExplorer => ({
+  label: "Bscscan",
+  url: {
+    base,
+    addressPath: "/address/[address]",
+    txPath: "/tx/[tx]",
+    blockPath: "/block/[block]",
+  },
+});
+export const WALLETS: Wallet[] = [
+  {
+    label: "Metamask",
+    name: "metamask",
+  },
+  {
+    label: "Trust Wallet",
+    name: "trustWallet",
+  },
+];
 export const NETWORKS: Network[] = [
   {
-    name: "Binance",
+    label: "Binance",
     id: "56",
-    logoName: "binance",
+    name: "binance",
     symbol: "BNB",
     decimals: 18,
+    explorer: BSCExplorer("https://bscscan.com"),
   },
   {
-    name: "Binance Test",
+    label: "Binance Test",
     id: "97",
-    logoName: "binance",
+    name: "binance",
     symbol: "BNB",
     decimals: 18,
+    explorer: BSCExplorer("https://testnet.bscscan.com"),
   },
   {
-    name: "Polygon",
+    label: "Polygon",
     id: "137",
     symbol: "MATIC",
-    logoName: "polygon",
+    name: "polygon",
     decimals: 18,
+    explorer: PolygonExplorer("https://polygonscan.com"),
   },
   {
-    name: "Polygon Test",
+    label: "Polygon Test",
     id: "80001",
     symbol: "MATIC",
-    logoName: "polygon",
+    name: "polygon",
     decimals: 18,
+    explorer: PolygonExplorer("https://mumbai.polygonscan.com`"),
   },
 ];

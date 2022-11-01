@@ -22,11 +22,13 @@ const Notice = () => {
     onClose && onClose();
   };
   return (
-    <Snackbar open={open} autoHideDuration={duration} onClose={handleClose}>
-      <Alert onClose={handleClose} severity={type} sx={{ width: "100%" }}>
-        {message}
-      </Alert>
-    </Snackbar>
+    open && (
+      <Snackbar open={open} autoHideDuration={duration} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={type} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
+    )
   );
 };
 export default Notice;

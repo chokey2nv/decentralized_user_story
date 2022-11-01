@@ -35,6 +35,10 @@ const walletSlice = createSlice({
       state = { ...initialState };
       return state;
     },
+    setNetworkId: (state, action: PayloadAction<string>) => {
+      state.networkId = action.payload;
+      return state;
+    },
     setNetwork: (state, action: PayloadAction<NetworkState>) => {
       state = {
         ...state,
@@ -57,6 +61,10 @@ const walletSlice = createSlice({
       state.symbol = action.payload;
       return state;
     },
+    disconnectAccount: (state) => {
+      state = initialState;
+      return state;
+    },
   },
 });
 
@@ -64,9 +72,11 @@ export const {
   walletConnect,
   walletDisconnect,
   setNetwork,
+  setNetworkId,
   setAddress,
   setBalance,
   setSymbol,
+  disconnectAccount,
 } = walletSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectWallet = (state: RootState) => state.wallet;

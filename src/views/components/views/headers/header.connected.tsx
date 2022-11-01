@@ -3,40 +3,20 @@ import { useSelector } from "react-redux";
 import { selectWallet } from "application/reducers.slices/wallet.core";
 import { NETWORKS } from "utils/constance";
 import { styled } from "@mui/material";
-import ButtonDropdown from "views/components/base/button.custom/button.dropdown";
 import { makeStyles } from "@mui/styles";
 import ThemeSwitchButton from "../theme.switch";
 import MediaButton from "../media.button";
-import utils from "utils";
+import NetworkButton from "../network.button";
+import AccountButton from "../account.button";
 
 const Root = styled("div")(() => ({
   display: "flex",
   alignItems: "center",
 }));
-const StyledBalanceDiv = styled("div")(() => ({
-  background: "#F2F5F8",
-  padding: "15px 5px",
-  borderRadius: "5px 0px 0px 5px",
-}));
-const StyledAddress = styled("div")(() => ({
-  padding: "15px 5px",
-  borderRadius: "0px 5px 5px 0px",
-}));
-const StyledBalanceAddressBox = styled("div")(() => ({
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  margin: "0px 5px",
-  border: "solid 1px #F2F5F8",
-}));
-const Image = styled("img")(() => ({
-  height: 30,
-  width: 40,
-}));
 const useStyle = makeStyles(() => ({
   iconButton: {
     padding: 10,
-    marginLeft: 5,
+    marginLeft: "5px !important",
   },
 }));
 export function HeaderConnected(): JSX.Element {
@@ -47,15 +27,13 @@ export function HeaderConnected(): JSX.Element {
   const classes = useStyle();
   return (
     <Root>
-      <ButtonDropdown
-        iconSrc={`/assets/networks/${network?.logoName}.svg`}
-        text={network?.name as string}
+      <NetworkButton name={network?.label} logoName={network?.name} />
+      <AccountButton
+        address={address}
+        balance={String(balance)}
+        symbol={network?.symbol}
+        wallet={wallet as string}
       />
-      <StyledBalanceAddressBox>
-        <StyledBalanceDiv>{`${balance} ${network?.symbol}`}</StyledBalanceDiv>
-        <StyledAddress>{utils.shortAddress(address)}</StyledAddress>
-        <Image src={`/assets/wallets/${wallet}.svg`} alt="wallet" />
-      </StyledBalanceAddressBox>
       <MediaButton
         classes={{
           iconButton: classes.iconButton,

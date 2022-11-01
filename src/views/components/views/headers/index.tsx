@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AppBar, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Container } from "@mui/system";
@@ -6,6 +6,8 @@ import { selectWallet } from "application/reducers.slices/wallet.core";
 import { useSelector } from "react-redux";
 import HeaderConnected from "./header.connected";
 import ButtonDropdown from "views/components/base/button.custom/button.dropdown";
+import DappsDropdown from "./Dapps";
+import HeaderDisConnected from "./header.disconnected";
 const StyledRoot = styled("div")(() => ({
   display: "flex",
   padding: 10,
@@ -33,9 +35,17 @@ const StyledStack = styled(Stack)(() => ({
 }));
 const StyledConnectionContainer = styled("div")(() => ({
   color: "black",
+  display: "flex",
+  alignItems: "center",
 }));
 const Header = () => {
-  const { address } = useSelector(selectWallet);
+  const { address } = useSelector(selectWallet),
+    [appBtnAnchorEl, setAppBtnAnchorEl] = useState<Element | undefined>(
+      undefined
+    ),
+    handleAppClick: React.MouseEventHandler = (e) => {
+      setAppBtnAnchorEl(e.currentTarget);
+    };
   return (
     <AppBar position="static" elevation={1}>
       <Container maxWidth="xl" style={{ background: "#fff", padding: 0 }}>
@@ -49,10 +59,18 @@ const Header = () => {
                 </ImageContainer>
                 <Text>Defi Story</Text>
               </StyledStack>
-              <ButtonDropdown iconSrc="/assets/menu.svg" text="DApps" />
+              <ButtonDropdown
+                onClick={handleAppClick}
+                iconSrc="/assets/menu.svg"
+                text="DApps"
+              />
+              <DappsDropdown
+                anchorEl={appBtnAnchorEl}
+                handleCloseEvent={() => setAppBtnAnchorEl(undefined)}
+              />
             </StyledCompanyContainer>
             <StyledConnectionContainer>
-              {address ? <HeaderConnected /> : "is not connected"}
+              {address ? <HeaderConnected /> : <HeaderDisConnected />}
             </StyledConnectionContainer>
           </StyledRoot>
         </Toolbar>

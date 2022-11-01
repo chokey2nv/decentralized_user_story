@@ -8,11 +8,14 @@ export interface ThemeSwitchButtonProps {
 }
 export default function ThemeSwitchButton({ classes }: ThemeSwitchButtonProps) {
   return (
-    <ButtonCustom
-      iconSrc="/assets/moon.svg"
-      classes={{
-        iconButton: { root: classes.iconButton },
-      }}
-    />
+    <>
+      <ButtonCustom
+        onClick={() => {}} //TODO:
+        iconSrc="/assets/moon.svg"
+        classes={{
+          iconButton: { root: classes.iconButton },
+        }}
+      />
+    </>
   );
 }

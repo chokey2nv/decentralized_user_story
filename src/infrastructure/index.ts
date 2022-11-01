@@ -5,8 +5,8 @@ import getWeb3 from "./getWeb3";
 export interface Infra {
   supportedIds: string[];
   log: typeof console.log;
-  web3: any;
-  accounts: string[];
+  web3: any | undefined;
+  accounts: string[] | undefined;
   wallet: Wallets;
 }
 class AppInfrastructure {
@@ -36,7 +36,10 @@ class AppInfrastructure {
     }
     return this.infraAccounts;
   }
-  static async getInfrastructure(wallet: Wallets): Promise<Infra> {
+  static async getInfrastructure(
+    wallet: Wallets
+  ): Promise<Infra | undefined | null> {
+    if (!wallet) return null;
     return {
       supportedIds: this.supportedIds,
       log: this.log,
