@@ -1,20 +1,8 @@
 import { Box } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
-import classNames from "classnames";
 import Tabs from "views/components/base/tabs";
 import TabPanel from "views/components/base/tabs/tabpanel";
 
-const menu = [
-  {
-    label: "Connect Wallet",
-    name: "connect",
-  },
-  {
-    label: "Generate Story",
-    name: "story",
-  },
-];
 export default function Home() {
   const [value, setValue] = useState(0);
   return (
