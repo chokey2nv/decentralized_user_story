@@ -1,10 +1,11 @@
 import React from "react";
+import Header from "views/components/views/headers";
 
 export default function AppLayout(props: any) {
-  return <div>
+  return (
     <div>
-      This is the layout
+      <Header />
+      {props.children}
     </div>
-    {props.children}
-  </div>
+  );
 }
