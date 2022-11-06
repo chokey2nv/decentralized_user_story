@@ -1,4 +1,4 @@
-import { NetowrkExplorer, Network, Wallet } from "./types";
+import { IDapps, NetowrkExplorer, Network, Wallet } from "./types";
 export const APP_NAME = "user_story";
 export const LOCAL_STORAGE_PARAMS = {
   wallet: `${APP_NAME}_wallet`,
@@ -65,5 +65,37 @@ export const NETWORKS: Network[] = [
     name: "polygon",
     decimals: 18,
     explorer: PolygonExplorer("https://mumbai.polygonscan.com`"),
+  },
+];
+export const DAPPS: IDapps[] = [
+  {
+    label: "PancakeSwap",
+    name: "pancakeSwap",
+  },
+  {
+    label: "QuickSwap",
+    name: "quickSwap",
+  },
+  {
+    label: "SmartSwap",
+    name: "smartSwap",
+  },
+  {
+    label: "P2P",
+    name: "p2p",
+  },
+];
+export const DAPPS_NFT: IDapps[] = [
+  {
+    label: "Opensea",
+    name: "opensea",
+  },
+  {
+    label: "NFTrade",
+    name: "nftTrade",
+  },
+  {
+    label: "Refinable",
+    name: "refinable",
   },
 ];

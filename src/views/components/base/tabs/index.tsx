@@ -17,6 +17,7 @@ const useStyle = makeStyles(() => ({
   menuItemActive: {
     color: "#1976d2",
     borderLeftWidth: "medium",
+    fontWeight: "bolder",
   },
 }));
 interface TabsProps {
@@ -25,7 +26,6 @@ interface TabsProps {
   value?: number;
 }
 export default function Tabs(props: TabsProps) {
-  console.log(props.children);
   const { handleChange, children, value } = props || {};
   const classes = useStyle();
   return (
