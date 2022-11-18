@@ -1,30 +1,51 @@
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import { showErrorNotice } from "application/flows/actions/notice.action";
+import { generateStoryAction } from "application/flows/actions/wallet.stat.action";
+import { useAppDispatch } from "application/hook";
+import React, { useCallback, useState } from "react";
+import { DAPPS, DAPPS_NFT } from "utils/constance";
+import { DappName } from "utils/types";
 import Tabs from "views/components/base/tabs";
 import TabPanel from "views/components/base/tabs/tabpanel";
 import ConnectionTab from "./connection.tab";
 import GenerateUserStory from "./story.tab";
 
 export type AppType = "dapp" | "nft";
-export interface AppStateObject {
-  name: string;
-  appType: AppType;
-  address?: string;
-}
 export type HomeState = Partial<{
   tabValue: number;
   appType: AppType;
-  dapp: AppStateObject;
+  selectedDapp: DappName;
   contractAddress: string;
+  username: string;
 }>;
 export default function Home() {
   const [state, _setState] = useState<HomeState>({
-    tabValue: 1,
+    tabValue: 0,
     appType: "dapp",
+    selectedDapp: DAPPS[0].name,
+    username: "",
   });
   const setState = (_state: HomeState) => _setState({ ...state, ..._state });
-  const { appType, dapp, tabValue, contractAddress } = state;
-
+  const { appType, selectedDapp, tabValue, contractAddress, username } = state;
+  const dispatch = useAppDispatch();
+  const generateStory = useCallback(
+    function () {
+      if (!username)
+        return dispatch(
+          showErrorNotice({
+            message: "Username missing!",
+          })
+        );
+      dispatch(
+        generateStoryAction({
+          username: String(username),
+          dappName: selectedDapp as DappName,
+          contractAddress,
+        })
+      );
+    },
+    [username, contractAddress, selectedDapp]
+  );
   return (
     <Box component="div" sx={{ display: "flex", marginTop: 10 }}>
       <Box component="div" sx={{ padding: 5 }}>
@@ -40,16 +61,28 @@ export default function Home() {
         <TabPanel value={tabValue as number} index={0}>
           <ConnectionTab
             appType={appType as AppType}
-            dapp={dapp as AppStateObject}
-            onDappTypeSelect={(appType: AppType) => setState({ appType })}
+            selectedDapp={selectedDapp as DappName}
+            onDappTypeSelect={(appType: AppType) => {
+              setState({
+                appType,
+                selectedDapp:
+                  appType === "dapp" ? DAPPS[0].name : DAPPS_NFT[0].name,
+              });
+            }}
             onContinue={() => setState({ tabValue: 1 })}
-            onDappSelect={(dapp: AppStateObject) => setState({ dapp })}
+            onDappSelect={(selectedDapp: DappName) =>
+              setState({ selectedDapp })
+            }
             contractAddress={contractAddress as string}
             onAddressChange={(contractAddress) => setState({ contractAddress })}
           />
         </TabPanel>
         <TabPanel value={tabValue as number} index={1}>
-          <GenerateUserStory />
+          <GenerateUserStory
+            setUsername={(username: string) => setState({ username })}
+            username={username as string}
+            onContinue={generateStory}
+          />
         </TabPanel>
       </Box>
     </Box>

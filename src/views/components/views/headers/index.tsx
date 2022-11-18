@@ -47,8 +47,8 @@ const Header = () => {
       setAppBtnAnchorEl(e.currentTarget);
     };
   return (
-    <AppBar position="static" elevation={1}>
-      <Container maxWidth="xl" style={{ background: "#fff", padding: 0 }}>
+    <AppBar position="static" elevation={1} style={{ background: "#fff" }}>
+      <Container maxWidth={false} style={{ padding: 0 }}>
         <Toolbar disableGutters>
           <StyledRoot>
             <StyledCompanyContainer>

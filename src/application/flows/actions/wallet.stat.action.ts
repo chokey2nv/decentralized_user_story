@@ -1,9 +1,9 @@
 import { WalletStatState } from "application/reducers.slices/wallet.stat.core";
+import { DappName } from "utils/types";
 
 const pkg = "[WALLET-STAT]";
 export const SET_STAT_WALLET = `${pkg} set stat`;
-export const GET_STAT_WALLET_TX_COUNT = `${pkg} get stat tx count`;
-export const GET_STAT_WALLET_TOKEN_ON_FIRST_TX = `${pkg} get stat token on 1st tx`;
+export const GENERATE_STATS = `${pkg} get stats`;
 
 export const setWalletStatAction = (
   networkId: string,
@@ -19,9 +19,14 @@ export const setWalletStatAction = (
     },
   };
 };
-export const getStatWalletTxCount = {
-  type: GET_STAT_WALLET_TX_COUNT,
-};
-export const getStatWalletTokenOnFirstTx = {
-  type: GET_STAT_WALLET_TOKEN_ON_FIRST_TX,
-};
+export interface IGenerateStoryActionPayload {
+  dappName: DappName;
+  contractAddress: string | undefined;
+  username: string;
+}
+export function generateStoryAction(payload: IGenerateStoryActionPayload) {
+  return {
+    type: GENERATE_STATS,
+    payload,
+  };
+}

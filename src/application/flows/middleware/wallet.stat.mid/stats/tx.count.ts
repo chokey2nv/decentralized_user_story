@@ -6,8 +6,7 @@ import Web3 from "web3";
 
 export const getWalletTxCountFlow = async (
   infra: Infra,
-  { dispatch, getState }: MiddlewareAPI,
-  action: any
+  { dispatch, getState }: MiddlewareAPI
 ) => {
   try {
     const { web3 } = infra || {};

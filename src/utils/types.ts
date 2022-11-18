@@ -8,6 +8,10 @@ export interface Wallet {
 }
 export type ExplorerName = "Etherscan" | "Polygonscan" | "Bscscan" | "Explorer";
 export type NetowrkExplorerPath = "address" | "transaction" | "block";
+export type SupportedNetworkId = "56" | "97" | "80001" | "137";
+export type ISwap = "pancakeSwap" | "quickSwap" | "smartSwap" | "p2p";
+export type INFT = "opensea" | "nftTrade" | "refinable";
+export type DappName = ISwap | INFT;
 export interface NetowrkExplorer {
   label: ExplorerName;
   url: {
@@ -19,7 +23,7 @@ export interface NetowrkExplorer {
 }
 export interface Network {
   label: string;
-  id: string;
+  id: SupportedNetworkId;
   url?: string;
   symbol: string;
   name: string;
@@ -30,7 +34,13 @@ export interface MiddlewareHangle {
   infra: Infra;
   api: MiddlewareAPI;
 }
-export interface IDapps {
+export interface IDapp<T> {
   label: string;
-  name: string;
+  name: DappName;
+  networks?: Partial<Record<SupportedNetworkId, T>>;
 }
+export interface DappContractBase {
+  routerAddress: string;
+  LPAddress: string;
+}
+// LPAddress: "0x7f1b11a798273dA438b4b132dF1383d8387e73b4",

@@ -1,4 +1,10 @@
-import { IDapps, NetowrkExplorer, Network, Wallet } from "./types";
+import {
+  IDapp,
+  NetowrkExplorer,
+  Network,
+  SupportedNetworkId,
+  Wallet,
+} from "./types";
 export const APP_NAME = "user_story";
 export const LOCAL_STORAGE_PARAMS = {
   wallet: `${APP_NAME}_wallet`,
@@ -67,35 +73,45 @@ export const NETWORKS: Network[] = [
     explorer: PolygonExplorer("https://mumbai.polygonscan.com`"),
   },
 ];
-export const DAPPS: IDapps[] = [
-  {
-    label: "PancakeSwap",
-    name: "pancakeSwap",
+export const NETWORK_IDS: Record<string, SupportedNetworkId> = {
+  BINANCE: "56",
+  BINANCE_TEST: "97",
+  POLYGON: "137",
+  POLYGON_TEST: "80001",
+};
+export const dappPancakeSwap: IDapp<{ LPAddress: string }> = {
+  label: "PancakeSwap",
+  name: "pancakeSwap",
+  networks: {
+    [NETWORK_IDS.BINANCE]: {
+      LPAddress: "0x7f1b11a798273dA438b4b132dF1383d8387e73b4",
+    },
   },
-  {
-    label: "QuickSwap",
-    name: "quickSwap",
-  },
-  {
-    label: "SmartSwap",
-    name: "smartSwap",
-  },
-  {
-    label: "P2P",
-    name: "p2p",
-  },
-];
-export const DAPPS_NFT: IDapps[] = [
-  {
-    label: "Opensea",
-    name: "opensea",
-  },
-  {
-    label: "NFTrade",
-    name: "nftTrade",
-  },
-  {
-    label: "Refinable",
-    name: "refinable",
-  },
-];
+};
+export const dappQuickSwap: IDapp<undefined> = {
+  label: "Quick Swap",
+  name: "quickSwap",
+};
+export const dappSmartSwap: IDapp<undefined> = {
+  label: "SmartSwap",
+  name: "smartSwap",
+};
+export const dappP2P: IDapp<undefined> = {
+  label: "P2P",
+  name: "p2p",
+};
+export const dappOpensea: IDapp<undefined> = {
+  label: "Opensea",
+  name: "opensea",
+};
+export const dappNFTrade: IDapp<undefined> = {
+  label: "NFTrade",
+  name: "nftTrade",
+};
+export const dappRefinable: IDapp<undefined> = {
+  label: "Refinable",
+  name: "refinable",
+};
+export const DAPPS = [dappPancakeSwap, dappQuickSwap, dappSmartSwap, dappP2P];
+export const DAPPS_NFT = [dappOpensea, dappNFTrade, dappRefinable];
+export const ALL_DAPPS = [...DAPPS, ...DAPPS_NFT];

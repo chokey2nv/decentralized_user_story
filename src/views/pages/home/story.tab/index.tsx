@@ -2,11 +2,6 @@ import React from "react";
 import { Info } from "@mui/icons-material";
 import { Button, FormLabel, Stack, TextField } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import {
-  getStatWalletTokenOnFirstTx,
-  getStatWalletTxCount,
-} from "application/flows/actions/wallet.stat.action";
-import { useAppDispatch } from "application/hook";
 
 const useStyle = makeStyles(() => ({
   root: {
@@ -26,13 +21,16 @@ const useStyle = makeStyles(() => ({
     marginTop: 20,
   },
 }));
-export default function GenerateUserStory() {
+export default function GenerateUserStory({
+  username,
+  setUsername,
+  onContinue,
+}: {
+  username: string;
+  setUsername: (username: string) => void;
+  onContinue: React.MouseEventHandler;
+}) {
   const classes = useStyle();
-  const dispatch = useAppDispatch();
-  const generateStory = () => {
-    dispatch(getStatWalletTxCount);
-    dispatch(getStatWalletTokenOnFirstTx);
-  };
   return (
     <Stack>
       <div className={classes.header}>Create Your Story</div>
@@ -41,7 +39,10 @@ export default function GenerateUserStory() {
       </div>
       <Stack>
         <FormLabel>Choose Username</FormLabel>
-        <TextField />
+        <TextField
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
+        />
       </Stack>
       <div className={classes.info}>
         <Info />
@@ -50,7 +51,7 @@ export default function GenerateUserStory() {
         </span>
       </div>
       <div className={classes.btnContainer}>
-        <Button fullWidth variant="contained" onClick={generateStory}>
+        <Button fullWidth variant="contained" onClick={onContinue}>
           Generate Story
         </Button>
       </div>

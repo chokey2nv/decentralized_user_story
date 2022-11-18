@@ -10,28 +10,28 @@ import {
 } from "@mui/material";
 import React from "react";
 import { DAPPS, DAPPS_NFT } from "utils/constance";
-import { AppStateObject, AppType } from "..";
+import { DappName } from "utils/types";
+import { AppType } from "..";
 
 export interface DappSelectionFormProps {
   address: string;
   appType: AppType;
   contractAddress: string;
+  selectedDapp: DappName;
   onDappTypeSelect: (appType: AppType) => void;
-  onDappSelect: (dapp: AppStateObject) => void;
+  onDappSelect: (dapp: DappName) => void;
   onAddressChange: (address: string) => void;
 }
 export default function DappSelectionForm({
   appType,
   address,
   contractAddress,
+  selectedDapp,
   onDappSelect,
   onAddressChange,
   onDappTypeSelect,
 }: DappSelectionFormProps) {
   if (!address) return null;
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onDappTypeSelect((event.target as HTMLInputElement).value as AppType);
-  };
   return (
     <>
       <FormControl fullWidth>
@@ -40,7 +40,7 @@ export default function DappSelectionForm({
           aria-labelledby="demo-radio-buttons-group-label"
           value={appType}
           name="radio-buttons-group"
-          onChange={handleChange}
+          onChange={(e) => onDappTypeSelect(e.target.value as AppType)}
         >
           <FormControlLabel
             control={<Radio />}
@@ -58,12 +58,8 @@ export default function DappSelectionForm({
         <InputLabel>Select Dapp</InputLabel>
         <Select
           id="demo-simple-select"
-          onChange={(e) =>
-            onDappSelect({
-              appType: appType as AppType,
-              name: String(e.target.value),
-            })
-          }
+          onChange={(e) => onDappSelect(e.target.value as DappName)}
+          value={selectedDapp}
           classes={{}}
         >
           {(appType === "dapp" ? DAPPS : DAPPS_NFT).map((dapp, index) => {

@@ -5,7 +5,6 @@ import { selectWallet } from "application/reducers.slices/wallet.core";
 import { useSelector } from "react-redux";
 import utils from "utils";
 import ConnectButton from "views/components/base/button.custom/button.connect";
-import { AppStateObject } from "../index";
 import DappSelectionForm, { DappSelectionFormProps } from "./form.dapps";
 
 const useStyle = makeStyles(() => ({
@@ -23,7 +22,6 @@ const useStyle = makeStyles(() => ({
 export interface ConnectionTabPros
   extends Omit<DappSelectionFormProps, "address"> {
   onContinue: React.MouseEventHandler;
-  dapp: AppStateObject;
 }
 export default function ConnectionTab(props: ConnectionTabPros) {
   const { onContinue, ...formOptions } = props;
