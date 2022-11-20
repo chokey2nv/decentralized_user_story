@@ -44,7 +44,7 @@ export default function Home() {
         })
       );
     },
-    [username, contractAddress, selectedDapp]
+    [username, contractAddress, selectedDapp, JSON.stringify(dispatch)]
   );
   return (
     <Box component="div" sx={{ display: "flex", marginTop: 10 }}>

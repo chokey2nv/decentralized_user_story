@@ -7,6 +7,16 @@
  */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "application/store";
+export interface ITransferToken {
+  address: string;
+  symbol: string;
+  amount: string;
+}
+export interface ISwapData {
+  received?: ITransferToken;
+  sent?: ITransferToken;
+  timestamp: number | string;
+}
 export type WalletStatState = {
   address: string;
   txCount?: number;
@@ -14,6 +24,7 @@ export type WalletStatState = {
   mostTradedToken?: string;
   highestTradedToken?: string;
   bestToken?: any;
+  swapHistory?: ISwapData[]
 };
 
 // Define the initial state using that type

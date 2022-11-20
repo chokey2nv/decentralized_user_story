@@ -20,6 +20,7 @@
     "@walletconnect/client": "^1.8.0",
     "@walletconnect/types": "^1.8.0",
     "@walletconnect/web3-provider": "^1.8.0",
+    "big.js": "^6.2.1",
     "classnames": "^2.3.2",
     "react": "^18.2.0",
     "react-animations": "^1.0.0",
@@ -55,5 +56,7 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/big.js": "^6.1.6"
+  }
 }

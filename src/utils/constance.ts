@@ -5,6 +5,16 @@ import {
   SupportedNetworkId,
   Wallet,
 } from "./types";
+import { Contract } from "web3-eth-contract/types";
+import pancakeFactoryABI from "./abis/pancake.factory.json";
+import ERC20TokenABI from "./abis/ERC20.json";
+import pancakePairABI from "./abis/pancake.pair.json";
+import Web3 from "web3";
+import { AbiItem } from "web3-utils/types";
+import { Log } from "web3-core/types";
+import { wait } from "./common";
+
+export { ERC20TokenABI };
 export const APP_NAME = "user_story";
 export const LOCAL_STORAGE_PARAMS = {
   wallet: `${APP_NAME}_wallet`,
@@ -79,36 +89,81 @@ export const NETWORK_IDS: Record<string, SupportedNetworkId> = {
   POLYGON: "137",
   POLYGON_TEST: "80001",
 };
-export const dappPancakeSwap: IDapp<{ LPAddress: string }> = {
+export function isSwapEvent(eventSign: string) {
+  const eventHash = Web3.utils.sha3(
+    "Swap(address,uint256,uint256,uint256,uint256,address)"
+  );
+  return eventSign === eventHash;
+}
+export function isTransferEvent(eventSign: string) {
+  const eventHash = Web3.utils.sha3("Transfer(address,address,uint256)");
+  return eventSign === eventHash;
+}
+export const dappPancakeSwap: IDapp = {
   label: "PancakeSwap",
   name: "pancakeSwap",
   networks: {
     [NETWORK_IDS.BINANCE]: {
-      LPAddress: "0x7f1b11a798273dA438b4b132dF1383d8387e73b4",
+      factory: "0xcA143Ce32Fe78f1f7019d7d551a6402fC5350c73",
     },
   },
+  abis: {
+    factory: pancakeFactoryABI as AbiItem[],
+  },
+  async isDappEvent(web3: Web3, networkId: SupportedNetworkId, logs: Log[]) {
+    const swapLog = logs[logs.length - 1];
+    if (!isSwapEvent(swapLog.topics[0])) return false;
+    else {
+      return this.isPairAddress?.(swapLog.address, web3, networkId) || false;
+    }
+  },
+  getFactory(web3: Web3, networkId: SupportedNetworkId): Contract {
+    return new web3.eth.Contract(
+      this.abis?.factory as AbiItem[],
+      this.networks?.[networkId]?.factory
+    );
+  },
+  async isPairAddress(
+    address: string,
+    web3: Web3,
+    networkId: SupportedNetworkId
+  ) {
+    try {
+      const pairContract = new web3.eth.Contract(
+        pancakePairABI as AbiItem[],
+        address
+      );
+      const factory = await pairContract.methods.factory().call();
+      return factory === this.networks?.[networkId]?.factory;
+    } catch (error) {
+      // console.log(error);
+      wait(2);
+      return false;
+    }
+  },
 };
-export const dappQuickSwap: IDapp<undefined> = {
+export type IDappPancakeSwap = typeof dappPancakeSwap;
+export const dappQuickSwap: IDapp = {
   label: "Quick Swap",
   name: "quickSwap",
 };
-export const dappSmartSwap: IDapp<undefined> = {
+export const dappSmartSwap: IDapp = {
   label: "SmartSwap",
   name: "smartSwap",
 };
-export const dappP2P: IDapp<undefined> = {
+export const dappP2P: IDapp = {
   label: "P2P",
   name: "p2p",
 };
-export const dappOpensea: IDapp<undefined> = {
+export const dappOpensea: IDapp = {
   label: "Opensea",
   name: "opensea",
 };
-export const dappNFTrade: IDapp<undefined> = {
+export const dappNFTrade: IDapp = {
   label: "NFTrade",
   name: "nftTrade",
 };
-export const dappRefinable: IDapp<undefined> = {
+export const dappRefinable: IDapp = {
   label: "Refinable",
   name: "refinable",
 };

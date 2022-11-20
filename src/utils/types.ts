@@ -1,6 +1,11 @@
 import { MiddlewareAPI } from "@reduxjs/toolkit";
 import { Infra } from "infrastructure";
+import Web3 from "web3";
+import { Log } from "web3-core/types";
+import { AbiItem } from "web3-utils/types";
+import { Contract } from "web3-eth-contract/types";
 
+export type { AbiItem };
 export type Wallets = "binance" | "metamask" | "trustWallet" | "walletConnect";
 export interface Wallet {
   label: string;
@@ -34,10 +39,22 @@ export interface MiddlewareHangle {
   infra: Infra;
   api: MiddlewareAPI;
 }
-export interface IDapp<T> {
+export interface IDapp {
   label: string;
   name: DappName;
-  networks?: Partial<Record<SupportedNetworkId, T>>;
+  networks?: Partial<Record<SupportedNetworkId, { factory: string }>>;
+  abis?: { factory: AbiItem[] };
+  getFactory?: (web3: Web3, networkId: SupportedNetworkId) => Contract;
+  isDappEvent?: (
+    web3: Web3,
+    networkId: SupportedNetworkId,
+    logs: Log[]
+  ) => Promise<boolean>;
+  isPairAddress?: (
+    address: string,
+    web3: Web3,
+    networkId: SupportedNetworkId
+  ) => Promise<boolean>;
 }
 export interface DappContractBase {
   routerAddress: string;

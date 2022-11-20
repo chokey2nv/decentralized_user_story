@@ -31,3 +31,20 @@ export const PancakeSwapEventAbi = [
   },
   { indexed: true, internalType: "address", name: "to", type: "address" },
 ];
+export const erc20TransferEventABI = [
+  {
+    indexed: true,
+    name: 'from',
+    type: 'address'
+  },
+  {
+    indexed: true,
+    name: 'to',
+    type: 'address'
+  },
+  {
+    indexed: false,
+    name: 'value',
+    type: 'uint256'
+  }
+];
