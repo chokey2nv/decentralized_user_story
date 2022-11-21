@@ -24,11 +24,18 @@ export type WalletStatState = {
   mostTradedToken?: string;
   highestTradedToken?: string;
   bestToken?: any;
-  swapHistory?: ISwapData[]
 };
 
 // Define the initial state using that type
-const initialState: Record<string, WalletStatState[]> = {};
+const initialState: Record<string, {
+  stat: WalletStatState[];
+  swapHistory?: ISwapData[];
+  blockMetadata: {
+    fromBlock: number;
+    toBlock: number;
+    latestBlock: number;
+  }
+}> = {};
 const walletStatSlice = createSlice({
   name: "walletStat",
   // `createSlice` will infer the state type from the `initialState` argument
@@ -40,17 +47,17 @@ const walletStatSlice = createSlice({
     ) {
       const { networkId, stat } = action.payload;
       if (state[networkId]) {
-        const addressStatIndex = state[networkId].findIndex(
+        const addressStatIndex = state[networkId].stat.findIndex(
           (item) => item.address === stat.address
         );
         if (addressStatIndex !== -1) {
-          let addressStat = state[networkId][addressStatIndex];
+          let addressStat = state[networkId].stat?.[addressStatIndex];
           addressStat = { ...addressStat, ...stat };
-          state[networkId][addressStatIndex] = addressStat;
+          state[networkId].stat[addressStatIndex] = addressStat;
           return state;
         }
-      } else if (state[networkId]) state[networkId].push(stat);
-      else state[networkId] = [stat];
+      } else if (state[networkId]) state[networkId].stat.push(stat);
+      else state[networkId].stat = [stat];
       return state;
     },
   },
