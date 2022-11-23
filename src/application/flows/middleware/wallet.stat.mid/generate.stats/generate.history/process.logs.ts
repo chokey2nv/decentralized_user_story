@@ -10,6 +10,8 @@ import {
   ISwapData,
   ITransferToken,
 } from "application/reducers.slices/wallet.stat.core";
+import { updateHistoryAction } from "application/flows/actions/wallet.stat.action";
+import { AppDispatch } from "application/store";
 
 function getSwap(
   swap: ISwapData,
@@ -41,6 +43,7 @@ async function addDirectPayment(
   };
 }
 export function processSwapLogs(
+  dispatch: AppDispatch,
   web3: Web3,
   address: string,
   networkId: SupportedNetworkId,
@@ -55,6 +58,7 @@ export function processSwapLogs(
       if (!(await dapp.isDappEvent?.(web3, networkId, logs))) continue;
       let swap: ISwapData = {
         timestamp: block.timestamp,
+        address
       };
       for (let j = 0; j < logs.length; j++) {
         const log = logs[j];
@@ -96,6 +100,8 @@ export function processSwapLogs(
       }
       if (swap.received || swap.sent) data.push(swap);
     }
-    return data;
+    if (data.length) {
+      dispatch(updateHistoryAction({ networkId, hxs: data }));
+    }
   };
 }

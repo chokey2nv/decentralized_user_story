@@ -7,12 +7,17 @@
  */
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "application/store";
+export type IUpdateHistoryAction = PayloadAction<{
+  networkId: string;
+  hxs: ISwapData[];
+}>;
 export interface ITransferToken {
   address: string;
   symbol: string;
   amount: string;
 }
 export interface ISwapData {
+  address: string;
   received?: ITransferToken;
   sent?: ITransferToken;
   timestamp: number | string;
@@ -25,45 +30,93 @@ export type WalletStatState = {
   highestTradedToken?: string;
   bestToken?: any;
 };
-
-// Define the initial state using that type
-const initialState: Record<string, {
-  stat: WalletStatState[];
-  swapHistory?: ISwapData[];
-  blockMetadata: {
-    fromBlock: number;
-    toBlock: number;
-    latestBlock: number;
+export interface IBlockMetadata {
+  fromBlock: number;
+  toBlock: number;
+  latestBlock: number;
+}
+export interface IUpdateBlockMetadata {
+  networkId: string;
+  metadata: IBlockMetadata;
+}
+export type ISwapFrequency = Record<string, Record<string, number>>;
+export interface IUpdateFrequencyPayload {
+  networkId: string;
+  frequency: ISwapFrequency;
+}
+export interface ITxCounts {
+  address: string;
+  count: number;
+}
+export type IUpdateTxCountAction = PayloadAction<{
+  networkId: string;
+  txCount: ITxCounts;
+}>;
+export type IWalletStat = Record<
+  string,
+  {
+    stat?: WalletStatState[];
+    txCounts?: ITxCounts[];
+    swapHistory?: ISwapData[];
+    swapFrequeryList?: ISwapFrequency;
+    blockMetadata?: IBlockMetadata;
   }
-}> = {};
+>;
+const initialState: IWalletStat = {};
 const walletStatSlice = createSlice({
   name: "walletStat",
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    setWalletStat(
-      state,
-      action: PayloadAction<{ networkId: string; stat: WalletStatState }>
-    ) {
-      const { networkId, stat } = action.payload;
+    updateTxCount(state, action: IUpdateTxCountAction) {
+      const { networkId, txCount } = action.payload;
       if (state[networkId]) {
-        const addressStatIndex = state[networkId].stat.findIndex(
-          (item) => item.address === stat.address
+        const iTxCounts = [...(state[networkId].txCounts || [])];
+        const countIndex = iTxCounts.findIndex(
+          (i) => i.address === txCount.address
         );
-        if (addressStatIndex !== -1) {
-          let addressStat = state[networkId].stat?.[addressStatIndex];
-          addressStat = { ...addressStat, ...stat };
-          state[networkId].stat[addressStatIndex] = addressStat;
-          return state;
-        }
-      } else if (state[networkId]) state[networkId].stat.push(stat);
-      else state[networkId].stat = [stat];
+        if (countIndex !== -1) {
+          iTxCounts[countIndex] = txCount;
+        } else iTxCounts.push(txCount);
+      } else state[networkId] = { txCounts: [txCount] };
+    },
+    updateHistory(state, action: IUpdateHistoryAction) {
+      const { networkId, hxs } = action.payload;
+      if (state[networkId]) {
+        const pHxs =
+          (state[networkId].swapHistory as ISwapData[])?.concat(hxs) || hxs;
+        state[networkId].swapHistory = pHxs;
+      } else state[networkId] = { swapHistory: hxs };
       return state;
+    },
+    updateBlockMetadata(state, action: PayloadAction<IUpdateBlockMetadata>) {
+      const { networkId, metadata } = action.payload;
+      if (state[networkId]) {
+        state[networkId].blockMetadata = metadata;
+      } else {
+        state[networkId] = {
+          swapHistory: [],
+          stat: [],
+          blockMetadata: metadata,
+        };
+      }
+      return state;
+    },
+    updateSwapFrequency(state, action: PayloadAction<IUpdateFrequencyPayload>) {
+      const { networkId, frequency } = action.payload;
+      if (state[networkId]) {
+        state[networkId].swapFrequeryList = frequency;
+      } else state[networkId] = { swapFrequeryList: frequency };
     },
   },
 });
 
-export const { setWalletStat } = walletStatSlice.actions;
+export const {
+  updateTxCount,
+  updateHistory,
+  updateBlockMetadata,
+  updateSwapFrequency,
+} = walletStatSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectWallet = (state: RootState) => state.walletStat;
 

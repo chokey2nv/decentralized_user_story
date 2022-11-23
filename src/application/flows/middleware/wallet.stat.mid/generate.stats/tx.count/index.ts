@@ -1,21 +1,21 @@
 import { MiddlewareAPI } from "@reduxjs/toolkit";
-import { setWalletStatAction } from "application/flows/actions/wallet.stat.action";
+import { updateTxCount } from "application/reducers.slices/wallet.stat.core";
 import { AppStore } from "application/store";
 import { Infra } from "infrastructure";
 import Web3 from "web3";
 
-export const getWalletTxCountFlow = async (
+export const walletTxCountFlow = async (
   infra: Infra,
   { dispatch, getState }: MiddlewareAPI
 ) => {
   try {
     const { web3 } = infra || {};
     const { networkId, address } = (getState as AppStore)().wallet;
-    const txCount = await (web3 as Web3).eth.getTransactionCount(address);
+    const count = await (web3 as Web3).eth.getTransactionCount(address);
     dispatch(
-      setWalletStatAction(networkId, {
-        address,
-        txCount: Number(txCount || 0),
+      updateTxCount({
+        networkId,
+        txCount: { address, count },
       })
     );
   } catch (error: any) {

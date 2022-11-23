@@ -1,13 +1,14 @@
 import { Middleware } from "@reduxjs/toolkit";
 import {
   GENERATE_STATS,
-  SET_STAT_WALLET,
+  UPDATE_SEARCH_BLOCKS_METADATA,
+  UPDATE_WALLET_HISTORY,
 } from "application/flows/actions/wallet.stat.action";
-import { setWalletStat } from "application/reducers.slices/wallet.stat.core";
-import AppInfrastructure, { Infra } from "infrastructure";
-import { LOCAL_STORAGE_PARAMS } from "utils/constance";
-import { Wallets } from "utils/types";
-import { generateUserStoryFlow } from "./generate.stats";
+import { Infra } from "infrastructure";
+import { validateInfra } from "../common/validate.infra";
+import { generateUserStoryFlow } from "./generate.stats/index";
+import { updateBlockMetadataFlow } from "./update.block.metadata";
+import { updateSwapHistoryFlow } from "./update.history/index";
 
 const walletStatMiddleWare =
   (infra: Promise<Infra>): Middleware =>
@@ -15,16 +16,16 @@ const walletStatMiddleWare =
   (next) =>
   async (action) => {
     next(action);
-    let appInfra: Infra = await infra;
-    if (!appInfra) {
-      appInfra = (await AppInfrastructure.getInfrastructure(
-        localStorage.getItem(LOCAL_STORAGE_PARAMS.wallet) as Wallets
-      )) as Infra;
-    }
+    const appInfra = await validateInfra(infra);
     switch (action.type) {
-      case SET_STAT_WALLET:
-        midwApi.dispatch(setWalletStat(action.payload));
+      case UPDATE_SEARCH_BLOCKS_METADATA: {
+        updateBlockMetadataFlow(appInfra, midwApi, action);
         break;
+      }
+      case UPDATE_WALLET_HISTORY: {
+        updateSwapHistoryFlow(appInfra, midwApi, action);
+        break;
+      }
       case GENERATE_STATS:
         generateUserStoryFlow(appInfra, midwApi, action);
         break;

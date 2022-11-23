@@ -15,7 +15,7 @@ function validateSelectedDapp(dappName: DappName) {
   if (!dapp) throw new Error(`Dapp for ${dappName} not seen`);
   return dapp;
 }
-export const getTokenOnFirstTransactionFlow = async (
+export const generateSwapHistoryFlow = async (
   infra: Infra,
   { dispatch, getState }: MiddlewareAPI,
   action: any
@@ -33,6 +33,7 @@ export const getTokenOnFirstTransactionFlow = async (
     let dapp = validateSelectedDapp(dappName);
     const getBlockLogs = blockLogs(web3, address);
     const swapProcessor = processSwapLogs(
+      dispatch,
       web3,
       address,
       networkId as SupportedNetworkId,
@@ -43,13 +44,12 @@ export const getTokenOnFirstTransactionFlow = async (
     const blockRange = 10; //5000;
     let fromBlock = 23202330;
     let toBlock = fromBlock + blockRange;
-    const logs = await swapProcessor(await getBlockLogs(fromBlock, toBlock));
+    swapProcessor(await getBlockLogs(fromBlock, toBlock));
     while (toBlock < latestBlock) {
       await wait(1);
       fromBlock += blockRange;
       toBlock += blockRange;
-      const log = await swapProcessor(await getBlockLogs(fromBlock, toBlock));
-      logs.concat(log);
+      swapProcessor(await getBlockLogs(fromBlock, toBlock));
     }
   } catch (error: any) {
     infra.log(error);
