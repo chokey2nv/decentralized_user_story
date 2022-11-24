@@ -1,6 +1,7 @@
 import { MiddlewareAPI } from "@reduxjs/toolkit";
 import { showErrorNotice } from "application/flows/actions/notice.action";
 import { IGenerateStoryActionPayload } from "application/flows/actions/wallet.stat.action";
+import { updateBlockMetadata } from "application/reducers.slices/wallet.stat.core";
 import { AppStore } from "application/store";
 import { Infra } from "infrastructure";
 import { wait } from "utils/common";
@@ -14,6 +15,14 @@ function validateSelectedDapp(dappName: DappName) {
   const dapp = ALL_DAPPS.find((item) => item.name === dappName);
   if (!dapp) throw new Error(`Dapp for ${dappName} not seen`);
   return dapp;
+}
+function getBlockFrom(block: number, blockRange: number) {
+  block += blockRange;
+  return Math.max(1, block);
+}
+function getBlockTo(block: number, blockRange: number, latestBlock: number) {
+  block += blockRange;
+  return Math.min(latestBlock, block);
 }
 export const generateSwapHistoryFlow = async (
   infra: Infra,
@@ -42,13 +51,32 @@ export const generateSwapHistoryFlow = async (
     //testing ends
     const latestBlock = 23202330; //await web3.eth.getBlockNumber();
     const blockRange = 10; //5000;
-    let fromBlock = 23202330;
-    let toBlock = fromBlock + blockRange;
+    let fromBlock = getBlockFrom(23202330, 0);
+    let toBlock = getBlockTo(fromBlock, blockRange, latestBlock);
+    dispatch(
+      updateBlockMetadata({
+        networkId,
+        metadata: {
+          fromBlock,
+          toBlock,
+          latestBlock,
+        },
+      })
+    );
     swapProcessor(await getBlockLogs(fromBlock, toBlock));
     while (toBlock < latestBlock) {
       await wait(1);
-      fromBlock += blockRange;
-      toBlock += blockRange;
+      fromBlock = getBlockFrom(fromBlock, blockRange);
+      toBlock += getBlockTo(toBlock, blockRange, latestBlock);
+      dispatch(
+        updateBlockMetadata({
+          networkId,
+          metadata: {
+            fromBlock,
+            toBlock,
+          },
+        })
+      );
       swapProcessor(await getBlockLogs(fromBlock, toBlock));
     }
   } catch (error: any) {

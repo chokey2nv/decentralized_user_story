@@ -8,7 +8,7 @@ export interface WalletState {
   networkId: string;
   balance: number;
   symbol: string;
-  web3?: any;
+  connecting?: boolean;
 }
 export type NetworkState = Omit<WalletState, "address" | "wallet">;
 export type AddressState = Pick<WalletState, "address" | "balance">;
@@ -21,6 +21,7 @@ const initialState: WalletState = {
   networkId: "",
   balance: 0,
   symbol: "",
+  connecting: false,
 };
 const walletSlice = createSlice({
   name: "wallet",
@@ -61,6 +62,10 @@ const walletSlice = createSlice({
       state.symbol = action.payload;
       return state;
     },
+    setConnectionState(state, action: PayloadAction<boolean>) {
+      state.connecting = action.payload;
+      return state;
+    },
     disconnectAccount: (state) => {
       state = initialState;
       return state;
@@ -76,6 +81,7 @@ export const {
   setAddress,
   setBalance,
   setSymbol,
+  setConnectionState,
   disconnectAccount,
 } = walletSlice.actions;
 // Other code such as selectors can use the imported `RootState` type

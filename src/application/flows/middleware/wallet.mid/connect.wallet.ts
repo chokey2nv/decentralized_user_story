@@ -5,11 +5,15 @@ import {
   showSuccessNotice,
   showWarningNotice,
 } from "application/flows/actions/notice.action";
-import { walletConnect } from "application/reducers.slices/wallet.core";
+import {
+  setConnectionState,
+  walletConnect,
+} from "application/reducers.slices/wallet.core";
 import AppInfrastructure, { Infra } from "infrastructure";
 import { LOCAL_STORAGE_PARAMS, NETWORKS } from "utils/constance";
 import { Wallets } from "utils/types";
 import Web3 from "web3";
+import BigNumber from "big.js";
 
 export const connectWalletFlow = async (
   infra: Promise<Infra>,
@@ -30,7 +34,7 @@ export const connectWalletFlow = async (
   let { supportedIds, log, web3, accounts, wallet } = infrastructure || {};
   try {
     dispatch(showWarningNotice({ message: `Connecting with ${wallet}` }));
-
+    dispatch(setConnectionState(true));
     const lastNetworkId = localStorage.getItem(
       LOCAL_STORAGE_PARAMS.networkId
     ) as Wallets;
@@ -49,10 +53,9 @@ export const connectWalletFlow = async (
         })
       );
     } else {
-      const BN = Web3.utils.toBN;
       const network = NETWORKS.find((item) => item.id === String(networkId)),
-        balance = BN(await web3.eth.getBalance(address))
-          .div(BN(10 ** Number(network?.decimals)))
+        balance = new BigNumber(await web3.eth.getBalance(address))
+          .div(10 ** Number(network?.decimals || 0))
           .toString();
       localStorage.setItem(LOCAL_STORAGE_PARAMS.wallet, wallet);
       localStorage.setItem(LOCAL_STORAGE_PARAMS.networkId, networkId);
@@ -68,9 +71,11 @@ export const connectWalletFlow = async (
       dispatch(
         showSuccessNotice({ message: `Successfully connection with ${wallet}` })
       );
+      dispatch(setConnectionState(false));
     }
   } catch (error) {
     log(error);
     dispatch(showErrorNotice((error as any)?.message));
+    dispatch(setConnectionState(false));
   }
 };

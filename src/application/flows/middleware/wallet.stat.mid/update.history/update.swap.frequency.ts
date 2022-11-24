@@ -13,10 +13,10 @@ export const updateSwapFrequencyFlow = async (
   action: IUpdateHistoryAction
 ) => {
   const { networkId, hxs } = action.payload;
-  let { swapFrequeryList } =
+  let { swapFrequeryList: list } =
     (getState().walletStat as IWalletStat)?.[networkId] || {};
   const { address } = (getState().wallet as WalletState) || {};
-  if (!swapFrequeryList) swapFrequeryList = {};
+  let swapFrequeryList = { ...(list || {}) };
   for (let i = 0; i < hxs.length; i++) {
     const hx = hxs[i];
     const key = `${hx.sent?.address}-${hx.received?.address}`;

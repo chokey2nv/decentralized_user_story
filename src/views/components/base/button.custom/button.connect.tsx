@@ -15,6 +15,8 @@ import { useAppDispatch } from "application/hook";
 import { Wallets } from "utils/types";
 import NetworkSelector from "views/components/views/network.button/network.selector";
 import WalletSelector from "views/components/views/network.button/wallet.selector";
+import { useSelector } from "react-redux";
+import { selectWallet } from "application/reducers.slices/wallet.core";
 
 const useStyle = makeStyles(() => ({
   connectionBtn: {
@@ -30,6 +32,10 @@ const useStyle = makeStyles(() => ({
 export default function ConnectButton() {
   const classes = useStyle(),
     dispatch = useAppDispatch();
+  const { connecting } = useSelector(selectWallet);
+  function onWalletSelect(wallet: Wallets) {
+    dispatch(newConnectionAction(wallet));
+  }
   function connectToNetwork() {
     dispatch(
       showDialogAction({
@@ -41,7 +47,7 @@ export default function ConnectButton() {
     dispatch(setNetworkIdAction(networkId));
     dispatch(
       setDialogComponentAction(() => (
-        <WalletSelector onWalletSelect={selectWallet} />
+        <WalletSelector onWalletSelect={onWalletSelect} />
       ))
     );
     dispatch(
@@ -53,17 +59,15 @@ export default function ConnectButton() {
       })
     );
   }
-  const selectWallet = (wallet: Wallets) => {
-    dispatch(newConnectionAction(wallet));
-  };
   return (
     <Button
       variant="contained"
       color="primary"
       className={classes.connectionBtn}
+      disabled={connecting}
       onClick={connectToNetwork}
     >
-      <div> Connect Wallet </div>
+      <div> {connecting ? "Connecting..." : "Connect Wallet"} </div>
       <AccountBalanceWalletOutlined style={{ marginLeft: 8 }} />
     </Button>
   );

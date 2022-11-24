@@ -1,14 +1,15 @@
+import React, { useCallback, useState } from "react";
 import { Box } from "@mui/material";
 import { showErrorNotice } from "application/flows/actions/notice.action";
-import { generateStoryAction } from "application/flows/actions/wallet.stat.action";
 import { useAppDispatch } from "application/hook";
-import React, { useCallback, useState } from "react";
 import { DAPPS, DAPPS_NFT } from "utils/constance";
 import { DappName } from "utils/types";
 import Tabs from "views/components/base/tabs";
 import TabPanel from "views/components/base/tabs/tabpanel";
 import ConnectionTab from "./connection.tab";
 import GenerateUserStory from "./story.tab";
+import { useNavigate } from "react-router-dom";
+import { appRouteNames } from "utils/route.names";
 
 export type AppType = "dapp" | "nft";
 export type HomeState = Partial<{
@@ -28,21 +29,22 @@ export default function Home() {
   const setState = (_state: HomeState) => _setState({ ...state, ..._state });
   const { appType, selectedDapp, tabValue, contractAddress, username } = state;
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const generateStory = useCallback(
     function () {
-      if (!username)
+      if (!username) {
         return dispatch(
           showErrorNotice({
             message: "Username missing!",
           })
         );
-      dispatch(
-        generateStoryAction({
+      }
+      navigate(appRouteNames.story, {
+        state: {
           username: String(username),
           dappName: selectedDapp as DappName,
-          contractAddress,
-        })
-      );
+        },
+      });
     },
     [username, contractAddress, selectedDapp, JSON.stringify(dispatch)]
   );

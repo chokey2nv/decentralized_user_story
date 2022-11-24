@@ -33,7 +33,7 @@ export type WalletStatState = {
 export interface IBlockMetadata {
   fromBlock: number;
   toBlock: number;
-  latestBlock: number;
+  latestBlock?: number;
 }
 export interface IUpdateBlockMetadata {
   networkId: string;
@@ -79,6 +79,7 @@ const walletStatSlice = createSlice({
           iTxCounts[countIndex] = txCount;
         } else iTxCounts.push(txCount);
       } else state[networkId] = { txCounts: [txCount] };
+      return state;
     },
     updateHistory(state, action: IUpdateHistoryAction) {
       const { networkId, hxs } = action.payload;
@@ -92,11 +93,12 @@ const walletStatSlice = createSlice({
     updateBlockMetadata(state, action: PayloadAction<IUpdateBlockMetadata>) {
       const { networkId, metadata } = action.payload;
       if (state[networkId]) {
-        state[networkId].blockMetadata = metadata;
+        state[networkId].blockMetadata = {
+          ...state[networkId].blockMetadata,
+          ...metadata,
+        };
       } else {
         state[networkId] = {
-          swapHistory: [],
-          stat: [],
           blockMetadata: metadata,
         };
       }
@@ -107,6 +109,7 @@ const walletStatSlice = createSlice({
       if (state[networkId]) {
         state[networkId].swapFrequeryList = frequency;
       } else state[networkId] = { swapFrequeryList: frequency };
+      return state;
     },
   },
 });
@@ -118,6 +121,6 @@ export const {
   updateSwapFrequency,
 } = walletStatSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
-export const selectWallet = (state: RootState) => state.walletStat;
+export const selectWalletStat = (state: RootState) => state.walletStat;
 
 export default walletStatSlice.reducer;
