@@ -39,11 +39,9 @@ export default function Home() {
           })
         );
       }
-      navigate(appRouteNames.story, {
-        state: {
-          username: String(username),
-          dappName: selectedDapp as DappName,
-        },
+      navigate({
+        pathname: appRouteNames.story,
+        search: `?username=${username}&dappName=${selectedDapp}`,
       });
     },
     [username, contractAddress, selectedDapp, JSON.stringify(dispatch)]

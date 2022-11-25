@@ -58,7 +58,6 @@ export function processSwapLogs(
       if (!(await dapp.isDappEvent?.(web3, networkId, logs))) continue;
       let swap: ISwapData = {
         timestamp: block.timestamp,
-        address
       };
       for (let j = 0; j < logs.length; j++) {
         const log = logs[j];
@@ -76,7 +75,6 @@ export function processSwapLogs(
               web3,
               log.address
             ).getInfo();
-            console.log(dLog.value);
             const amount = BigNumber(dLog.value)
               .div(10 ** decimals)
               .toFixed();
@@ -101,7 +99,7 @@ export function processSwapLogs(
       if (swap.received || swap.sent) data.push(swap);
     }
     if (data.length) {
-      dispatch(updateHistoryAction({ networkId, hxs: data }));
+      dispatch(updateHistoryAction({ networkId, hxs: data, address }));
     }
   };
 }

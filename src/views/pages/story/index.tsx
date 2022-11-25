@@ -18,11 +18,14 @@ export default function Story() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { address, networkId, connecting } = useSelector(selectWallet);
-  const { blockMetadata: block } =
-    useSelector(selectWalletStat)[networkId] || {};
-  const [params, setParams] = useState<Partial<IGenerateStoryActionPayload>>(
-    {}
-  );
+  const { blockMetadata: block, isSearchingHx } =
+    useSelector(selectWalletStat)?.[networkId]?.[address] || {};
+  console.log(isSearchingHx);
+  const [params, setParams] = useState<Partial<IGenerateStoryActionPayload>>({
+    username: undefined,
+    dappName: undefined,
+    contractAddress: undefined,
+  });
   function validateQueryString(queryString: Record<string, string>) {
     if (!queryString["dappName"]) {
       navigate(appRouteNames.home, { replace: true });
@@ -30,11 +33,12 @@ export default function Story() {
     const historyAction: IGenerateStoryActionPayload = {
       dappName: queryString["dappName"] as DappName,
       username: queryString["username"],
+      contractAddress: undefined,
     };
     return historyAction;
   }
   useEffect(() => {
-    if (address && location) {
+    if (!isSearchingHx && address && location) {
       const { state, search } = location;
       let queryString: Record<string, string> = {};
       if (state) {
@@ -52,7 +56,7 @@ export default function Story() {
       dispatch(generateStoryAction(payload));
       setParams(payload);
     }
-  }, [address, JSON.stringify(location)]);
+  }, [address, JSON.stringify(location), JSON.stringify(dispatch)]);
   const { dappName, username } = params;
   const dapp = ALL_DAPPS.find((item) => item.name === dappName);
 

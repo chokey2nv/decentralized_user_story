@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useAppDispatch } from "application/hook";
 import { connectWalletAction } from "application/flows/actions";
@@ -23,7 +23,9 @@ function App() {
                 path={route.path}
                 element={
                   <AppLayout>
-                    <route.Component />
+                    <Suspense>
+                      <route.Component />
+                    </Suspense>
                   </AppLayout>
                 }
               />

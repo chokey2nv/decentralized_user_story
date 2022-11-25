@@ -1,4 +1,4 @@
-import { address64Bit } from "utils/common";
+import { address64Bit } from "utils/common/index";
 import Web3 from "web3";
 
 export function blockLogs(web3: Web3, accountAddress: string) {

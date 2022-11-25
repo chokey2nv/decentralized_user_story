@@ -1,4 +1,8 @@
-import { ISwapData } from "application/reducers.slices/wallet.stat.core";
+import {
+  IHistoryPayload,
+  ISwapData,
+  IUpdateFrequencyPayload,
+} from "application/reducers.slices/wallet.stat.core";
 import { DappName } from "utils/types";
 
 const pkg = "[WALLET-STAT]";
@@ -16,10 +20,7 @@ export function generateStoryAction(payload: IGenerateStoryActionPayload) {
     payload,
   };
 }
-export function updateHistoryAction(payload: {
-  networkId: string;
-  hxs: ISwapData[];
-}) {
+export function updateHistoryAction(payload: IHistoryPayload) {
   return {
     type: UPDATE_WALLET_HISTORY,
     payload,

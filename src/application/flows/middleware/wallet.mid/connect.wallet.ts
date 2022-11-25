@@ -12,7 +12,6 @@ import {
 import AppInfrastructure, { Infra } from "infrastructure";
 import { LOCAL_STORAGE_PARAMS, NETWORKS } from "utils/constance";
 import { Wallets } from "utils/types";
-import Web3 from "web3";
 import BigNumber from "big.js";
 
 export const connectWalletFlow = async (
@@ -62,7 +61,7 @@ export const connectWalletFlow = async (
       dispatch(
         walletConnect({
           wallet,
-          address: address as string,
+          address: "0xc8cb5c7ebe866f7bf64246075d53cf4f09b48e9e", // address as string,
           networkId: String(networkId),
           balance: Number(balance),
           symbol: network?.symbol as string,

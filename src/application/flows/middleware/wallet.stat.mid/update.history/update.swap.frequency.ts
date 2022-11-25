@@ -1,30 +1,23 @@
 import { MiddlewareAPI } from "@reduxjs/toolkit";
-import { WalletState } from "application/reducers.slices/wallet.core";
 import {
+  IFrequency,
   IUpdateHistoryAction,
-  IWalletStat,
   updateSwapFrequency,
 } from "application/reducers.slices/wallet.stat.core";
 import { Infra } from "infrastructure";
 
 export const updateSwapFrequencyFlow = async (
-  infra: Infra,
-  { dispatch, getState }: MiddlewareAPI,
+  _: Infra,
+  { dispatch }: MiddlewareAPI,
   action: IUpdateHistoryAction
 ) => {
-  const { networkId, hxs } = action.payload;
-  let { swapFrequeryList: list } =
-    (getState().walletStat as IWalletStat)?.[networkId] || {};
-  const { address } = (getState().wallet as WalletState) || {};
-  let swapFrequeryList = { ...(list || {}) };
+  const { networkId, hxs, address } = action.payload;
+  const list: IFrequency = {};
   for (let i = 0; i < hxs.length; i++) {
-    const hx = hxs[i];
-    const key = `${hx.sent?.address}-${hx.received?.address}`;
-    if (!swapFrequeryList[address] || !swapFrequeryList[address][key]) {
-      swapFrequeryList[address] = { [key]: 1 };
-    } else {
-      swapFrequeryList[address][key] += 1;
-    }
+    const { sent, received } = hxs[i];
+    const key = `${sent?.address}-${received?.address}`;
+    if (list[key]) list[key] += 1;
+    else list[key] = 1;
   }
-  dispatch(updateSwapFrequency({ networkId, frequency: swapFrequeryList }));
+  dispatch(updateSwapFrequency({ networkId, frequency: list, address }));
 };
