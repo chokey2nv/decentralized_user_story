@@ -73,7 +73,7 @@ export const generateSwapHistoryFlow = async (
     );
     swapProcessor(await getBlockLogs(fromBlock, toBlock));
     while (toBlock < latestBlock) {
-      await wait(1);
+      await wait(10);
       fromBlock = getBlockFrom(fromBlock, blockRange);
       toBlock = getBlockTo(toBlock, blockRange, latestBlock);
       dispatch(
