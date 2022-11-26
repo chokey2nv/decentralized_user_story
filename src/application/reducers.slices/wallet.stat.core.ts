@@ -45,6 +45,7 @@ export interface IIsSearchingHxPayload extends PayloadBase {
 export interface ITxCounts {
   address: string;
   count: number;
+  percent: number;
 }
 export type IUpdateTxCountAction = PayloadAction<{
   networkId: string;
@@ -57,6 +58,7 @@ export type IWalletStat = Record<
     string,
     {
       stat?: WalletStatState[];
+      txCountPercent?: number;
       txCounts?: number;
       swapHistory?: ISwapData[];
       swapFrequeryList?: ISwapFrequency;
@@ -87,6 +89,7 @@ const walletStatSlice = createSlice({
       const address = txCount.address;
       state = validateState(state, networkId, address);
       state[networkId][address].txCounts = txCount.count;
+      state[networkId][address].txCountPercent = txCount.percent;
       return state;
     },
     updateHistory(state, action: IUpdateHistoryAction) {
