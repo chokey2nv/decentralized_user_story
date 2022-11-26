@@ -1,7 +1,7 @@
 import { makeStyles } from "@mui/styles";
+import { useAppSelector } from "application/hook";
 import { selectWallet } from "application/reducers.slices/wallet.core";
 import classNames from "classnames";
-import { useSelector } from "react-redux";
 import { NETWORKS } from "utils/constance";
 
 const useStyles = makeStyles(() => ({
@@ -75,7 +75,7 @@ export function NetworkSelector({
   selectNetwork: (network: string) => void;
 }) {
   const classes = useStyles(),
-    { networkId } = useSelector(selectWallet);
+    { networkId } = useAppSelector(selectWallet);
   return (
     <div className={classes.root}>
       <div className={classes.heading}>Choose a Network to connect to</div>

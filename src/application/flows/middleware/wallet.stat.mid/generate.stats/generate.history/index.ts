@@ -37,8 +37,12 @@ export const generateSwapHistoryFlow = async (
   dispatch(updateIsSearchingHx({ networkId, address, isSeaerching: true }));
   try {
     const web3: Web3 = infra?.web3;
-    const { dappName, contractAddress, username } =
-      (action.payload as IGenerateStoryActionPayload) || {};
+    const {
+      dappName,
+      fromBlock: apiFromBlock,
+      contractAddress,
+      username,
+    } = (action.payload as IGenerateStoryActionPayload) || {};
     let dapp = validateSelectedDapp(dappName);
     const getBlockLogs = blockLogs(web3, address);
     const swapProcessor = processSwapLogs(
@@ -49,9 +53,11 @@ export const generateSwapHistoryFlow = async (
       dapp
     );
     //testing ends
-    const latestBlock = 23202330; //await web3.eth.getBlockNumber();
-    const blockRange = 10; //5000;
-    let fromBlock = getBlockFrom(23202330, 0);
+    // const latestBlock = 23202330; //await web3.eth.getBlockNumber();
+    const latestBlock = await web3.eth.getBlockNumber();
+    const blockRange = 4000;
+    // let fromBlock = getBlockFrom(23202330, 0);
+    let fromBlock = getBlockFrom(Number(apiFromBlock) || 1, 0);
     let toBlock = getBlockTo(fromBlock, blockRange, latestBlock);
     dispatch(clearHistoryy({ networkId, address }));
     dispatch(
@@ -69,7 +75,7 @@ export const generateSwapHistoryFlow = async (
     while (toBlock < latestBlock) {
       await wait(1);
       fromBlock = getBlockFrom(fromBlock, blockRange);
-      toBlock += getBlockTo(toBlock, blockRange, latestBlock);
+      toBlock = getBlockTo(toBlock, blockRange, latestBlock);
       dispatch(
         updateBlockMetadata({
           networkId,

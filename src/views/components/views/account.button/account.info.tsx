@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
@@ -10,7 +9,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import classNames from "classnames";
 import { selectWallet } from "application/reducers.slices/wallet.core";
 import { disconnectAction } from "application/flows/actions";
-import { useAppDispatch } from "application/hook";
+import { useAppDispatch, useAppSelector } from "application/hook";
 import { NETWORKS } from "utils/constance";
 import utils from "utils";
 import {
@@ -152,7 +151,7 @@ const useStyles = makeStyles(() => ({
 function AccountInfo() {
   const classes = useStyles();
   const dispatch = useAppDispatch();
-  const { address, networkId, wallet } = useSelector(selectWallet),
+  const { address, networkId, wallet } = useAppSelector(selectWallet),
     network = NETWORKS.find((item) => item.id === networkId);
   const [tooltipTitle, setTooltipTitle] = useState("Copy");
   const copyToClipBoard = async (text: any) => {

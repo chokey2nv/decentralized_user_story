@@ -13,6 +13,7 @@ export interface IGenerateStoryActionPayload {
   username: string;
   dappName: DappName;
   contractAddress?: string | undefined;
+  fromBlock?: number
 }
 export function generateStoryAction(payload: IGenerateStoryActionPayload) {
   return {

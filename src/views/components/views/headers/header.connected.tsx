@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { selectWallet } from "application/reducers.slices/wallet.core";
 import { NETWORKS } from "utils/constance";
 import { styled } from "@mui/material";
@@ -8,6 +7,7 @@ import ThemeSwitchButton from "../theme.switch";
 import MediaButton from "../media.button";
 import NetworkButton from "../network.button";
 import AccountButton from "../account.button";
+import { useAppSelector } from "application/hook";
 
 const Root = styled("div")(() => ({
   display: "flex",
@@ -20,7 +20,7 @@ const useStyle = makeStyles(() => ({
   },
 }));
 export function HeaderConnected(): JSX.Element {
-  const { networkId, balance, address, wallet } = useSelector(selectWallet);
+  const { networkId, balance, address, wallet } = useAppSelector(selectWallet);
   const network = NETWORKS.find(
     (item) => String(item.id) === String(networkId)
   );

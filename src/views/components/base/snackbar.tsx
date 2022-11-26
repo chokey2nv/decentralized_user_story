@@ -1,12 +1,11 @@
 import { Alert, Snackbar, SnackbarCloseReason } from "@mui/material";
 import { hideNotice } from "application/flows/actions/notice.action";
-import { useAppDispatch } from "application/hook";
+import { useAppDispatch, useAppSelector } from "application/hook";
 import { selectNotice } from "application/reducers.slices/notice.core";
 import React from "react";
-import { useSelector } from "react-redux";
 
 const Notice = () => {
-  const { open, onClose, type, message, duration } = useSelector(selectNotice),
+  const { open, onClose, type, message, duration } = useAppSelector(selectNotice),
     dispatch = useAppDispatch();
 
   if (!open) return null;

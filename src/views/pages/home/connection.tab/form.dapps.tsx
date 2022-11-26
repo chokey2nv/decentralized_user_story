@@ -8,6 +8,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import React from "react";
 import { DAPPS, DAPPS_NFT } from "utils/constance";
 import { DappName } from "utils/types";
@@ -22,6 +23,11 @@ export interface DappSelectionFormProps {
   onDappSelect: (dapp: DappName) => void;
   onAddressChange: (address: string) => void;
 }
+const useStyle = makeStyles(() => ({
+  selected: {
+    color: "#319EF6",
+  },
+}));
 export default function DappSelectionForm({
   appType,
   address,
@@ -31,6 +37,7 @@ export default function DappSelectionForm({
   onAddressChange,
   onDappTypeSelect,
 }: DappSelectionFormProps) {
+  const classes = useStyle();
   if (!address) return null;
   return (
     <>
@@ -45,15 +52,25 @@ export default function DappSelectionForm({
           <FormControlLabel
             control={<Radio />}
             value="dapp"
-            label="Decentralized App"
+            label={
+              <span className={appType === "dapp" ? classes.selected : ""}>
+                Decentralized App
+              </span>
+            }
           />
           <FormControlLabel
             control={<Radio />}
             value="nft"
-            label="NFT Marketplace"
+            label={
+              <span className={appType === "nft" ? classes.selected : ""}>
+                NFT Marketplace
+              </span>
+            }
+            // label="NFT Marketplace"
           />
         </RadioGroup>
       </FormControl>
+      <div style={{ marginTop: 20 }} />
       <FormControl fullWidth>
         <InputLabel>Select Dapp</InputLabel>
         <Select
@@ -71,6 +88,16 @@ export default function DappSelectionForm({
           })}
         </Select>
       </FormControl>
+      <div
+        style={{
+          marginTop: 20,
+          marginBottom: 20,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        OR
+      </div>
       <InputLabel>Input Contract Address</InputLabel>
       <TextField
         value={contractAddress}

@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { appRouteNames } from "utils/route.names";
 import { useAppDispatch, useAppSelector } from "application/hook";
@@ -14,12 +14,28 @@ import UserHistoryBox from "./history.box";
 import SearchHeader from "./history.box/search.header";
 import { Grid } from "@mui/material";
 import UserStats from "./stats";
-
+import { makeStyles } from "@mui/styles";
+const useStyle = makeStyles(() => ({
+  statDisplay: {
+    borderLeft: "solid 1px #DEE6ED",
+  },
+  img: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+  },
+  header: {
+    display: "flex",
+    alignItems: "center",
+  },
+}));
 export default function Story() {
+  const classes = useStyle();
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { address, networkId, connecting } = useAppSelector(selectWallet);
+  const { address, networkId, connecting, wallet } =
+    useAppSelector(selectWallet);
   const { blockMetadata: block, isSearchingHx } =
     useAppSelector(selectWalletStat)?.[networkId]?.[address] || {};
   const [params, setParams] = useState<Partial<IGenerateStoryActionPayload>>({
@@ -34,6 +50,7 @@ export default function Story() {
     const historyAction: IGenerateStoryActionPayload = {
       dappName: queryString["dappName"] as DappName,
       username: queryString["username"],
+      fromBlock: Number(queryString["fromBlock"] || 0),
       contractAddress: undefined,
     };
     return historyAction;
@@ -61,20 +78,67 @@ export default function Story() {
   const { dappName, username } = params;
   const dapp = ALL_DAPPS.find((item) => item.name === dappName);
 
-  if (!address && connecting) {
-    return <div>connecting...</div>;
+  if (connecting) {
+    return (
+      <div
+        style={{
+          minHeight: 200,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Connecting to {wallet || " wallet"} ...
+      </div>
+    );
+  } else if (!address) {
+    return (
+      <div
+        style={{
+          minHeight: 200,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        Connect to wallet
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>{dapp?.label}</h1>
+    <div style={{ padding: 20 }}>
+      <div className={classes.header}>
+        <img
+          src={`/assets/stats/${dapp?.name}/logo.svg`}
+          className={classes.img}
+        />
+        <h1>{dapp?.label}</h1>
+      </div>
+      <div>
+        <Link to={appRouteNames.home}>Back</Link>
+      </div>
       <SearchHeader />
-      <Grid container spacing={2}>
+      <Grid container spacing={2} style={{ margin: 0 }}>
         <Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
           <UserHistoryBox />
         </Grid>
-        <Grid item xs={12} sm={9} md={9} lg={9} xl={9}>
-          <UserStats />
+        <Grid
+          className={classes.statDisplay}
+          item
+          xs={12}
+          sm={9}
+          md={9}
+          lg={9}
+          xl={9}
+        >
+          <UserStats
+            dappName={dappName}
+            dappInfo={{
+              header: String(dapp?.label),
+              dappName: dappName as DappName,
+            }}
+          />
         </Grid>
       </Grid>
     </div>

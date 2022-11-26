@@ -33,7 +33,9 @@ export default function SearchHeader() {
     useAppSelector(selectWalletStat)?.[networkId]?.[address] || {};
 
   if (connecting) {
-    return <div className={classes.full}>Connecting to {wallet} ...</div>;
+    return (
+      <div className={classes.full}>Connecting to {wallet || "wallet"} ...</div>
+    );
   }
   return (
     <div className={classes.root}>
@@ -41,7 +43,7 @@ export default function SearchHeader() {
         <>
           <img className={classes.img} src="/assets/search.gif" alt="search" />
           <div>
-            Searching blocks:{" "}
+            <strong>Searching blocks:</strong>{" "}
             {block?.latestBlock ? `${block.fromBlock} to ${block.toBlock}` : ""}
           </div>
         </>

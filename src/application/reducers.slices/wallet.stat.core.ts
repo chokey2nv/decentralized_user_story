@@ -52,6 +52,17 @@ export type IUpdateTxCountAction = PayloadAction<{
   txCount: ITxCounts;
 }>;
 export interface IIsSearchingHxPayload {}
+export interface ITrade {
+  address: string;
+  count: number;
+  symbol: string;
+}
+export interface ITradePayload extends PayloadBase {
+  trades: ITrade[];
+}
+export interface IHighestTradePayload extends PayloadBase {
+  token: ITransferToken;
+}
 export type IWalletStat = Record<
   string,
   Record<
@@ -62,6 +73,8 @@ export type IWalletStat = Record<
       txCounts?: number;
       swapHistory?: ISwapData[];
       swapFrequeryList?: ISwapFrequency;
+      mostTraded?: ITrade[];
+      highestTrade?: ITransferToken;
       blockMetadata?: IBlockMetadata;
       isSearchingHx?: boolean;
     }
@@ -143,6 +156,40 @@ const walletStatSlice = createSlice({
         }
       return state;
     },
+    updateMostTraded(state, action: PayloadAction<ITradePayload>) {
+      const { networkId, address, trades } = action.payload;
+      state = validateState(state, networkId, address);
+      const mostTraded = state[networkId][address].mostTraded || [];
+      for (let i = 0; i < trades.length; i++) {
+        const { address: tokenAddress, count } = trades[i];
+        const tradeIndex = mostTraded?.findIndex(
+          (item) => item.address === tokenAddress
+        );
+        if (tradeIndex === -1) {
+          mostTraded?.push(trades[i]);
+        } else {
+          mostTraded[Number(tradeIndex)].count += count;
+        }
+      }
+      state[networkId][address].mostTraded = mostTraded;
+      state[networkId][address].mostTraded?.sort((a, b) => b.count - a.count);
+      return state;
+    },
+    updateHighestTradeToken(
+      state,
+      action: PayloadAction<IHighestTradePayload>
+    ) {
+      const { networkId, address, token } = action.payload;
+      state = validateState(state, networkId, address);
+      if (!state[networkId][address].highestTrade) {
+        state[networkId][address].highestTrade = token;
+      } else {
+        const highestTrade = state[networkId][address].highestTrade;
+        if (Number(highestTrade?.amount) < Number(token.amount))
+          state[networkId][address].highestTrade = token;
+      }
+      return state;
+    },
     clearHistoryy(state, action: PayloadAction<PayloadBase>) {
       const { networkId, address } = action.payload;
       state = validateState(state, networkId, address);
@@ -158,8 +205,10 @@ export const {
   updateHistory,
   updateBlockMetadata,
   updateSwapFrequency,
+  updateMostTraded,
   updateIsSearchingHx,
   clearHistoryy,
+  updateHighestTradeToken,
 } = walletStatSlice.actions;
 // Other code such as selectors can use the imported `RootState` type
 export const selectWalletStat = (state: RootState) => state.walletStat;

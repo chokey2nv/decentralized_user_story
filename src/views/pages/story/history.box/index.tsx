@@ -1,27 +1,40 @@
 import React from "react";
 import { Forward } from "@mui/icons-material";
 import { Divider, List, ListItem, ListItemText } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { selectWallet } from "application/reducers.slices/wallet.core";
 import { selectWalletStat } from "application/reducers.slices/wallet.stat.core";
-import { useSelector } from "react-redux";
 import TokenWithImage from "views/components/base/token";
 import { makeStyles } from "@mui/styles";
+import SearchIcon from "views/components/base/icons/search.icon";
+import { useAppSelector } from "application/hook";
 const useStyle = makeStyles(() => ({
-  root: {
-    border: "1px solid #DEE6ED",
+  root: {},
+}));
+const Search = styled(SearchIcon)(() => ({
+  ":root": {
+    width: 50,
+    height: 20,
   },
 }));
-
 export default function UserHistoryBox() {
   const classes = useStyle();
-  const { networkId, address } = useSelector(selectWallet);
-  const { swapHistory } =
-    useSelector(selectWalletStat)?.[networkId]?.[address] || {};
+  const { networkId, address } =
+    useAppSelector(selectWallet);
+  const { swapHistory, isSearchingHx } =
+    useAppSelector(selectWalletStat)?.[networkId]?.[address] || {};
   return (
     <div className={classes.root}>
       <List>
         <ListItem>
-          <ListItemText>Swap History</ListItemText>
+          <ListItemText
+            primaryTypographyProps={{
+              style: { display: "flex", alignItems: "center" },
+            }}
+          >
+            <strong style={{ marginRight: 20 }}>Swap History</strong>
+            {isSearchingHx && <Search />}
+          </ListItemText>
         </ListItem>
         <Divider />
         {swapHistory?.map((swap, index) => {
@@ -39,6 +52,12 @@ export default function UserHistoryBox() {
                   <TokenWithImage symbol={sent?.symbol} />
                   <Forward />
                   <TokenWithImage symbol={received?.symbol} />
+                </div>
+                <div style={{ padding: 10, color: "red" }}>
+                  {sent?.amount} {sent?.symbol}
+                </div>
+                <div style={{ padding: 10, color: "green" }}>
+                  {received?.amount} {received?.symbol}
                 </div>
                 <div style={{ padding: 10 }}>
                   {new Date(Number(swap.timestamp) * 1000).toLocaleString()}

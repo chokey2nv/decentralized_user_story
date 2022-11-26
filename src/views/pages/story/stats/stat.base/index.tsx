@@ -2,6 +2,7 @@ import { Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import React from "react";
+import DappTradeMark, { IDappTradeMarkProps } from "./dapp.trade.mark";
 const Root = styled("div")(({ theme }) => ({
   background: "#000000",
   width: 650,
@@ -94,9 +95,10 @@ export interface IStatBaseProps {
   statString: string;
   header: string;
   subheader: string;
-  highlight: string;
+  highlight?: string;
   searching: boolean;
   imageSrc: string;
+  dappInfo: IDappTradeMarkProps
 }
 export default function StatBase({
   statString,
@@ -105,19 +107,12 @@ export default function StatBase({
   highlight,
   searching,
   imageSrc,
+  dappInfo
 }: IStatBaseProps) {
   return (
     <Root>
       <LeftBody>
-        <StyledCompanyContainer>
-          <Logo src="/assets/logo.svg" alt="logo" />
-          <StyledStack direction="column">
-            <ImageContainer>
-              <CompanyName>Rigel Protocol</CompanyName>
-            </ImageContainer>
-            <Text>Defi Story</Text>
-          </StyledStack>
-        </StyledCompanyContainer>
+        <DappTradeMark {...dappInfo} />
         <Body>
           <Stat>{statString}</Stat>
           <HeaderContainer>

@@ -10,7 +10,7 @@ export const SET_WALLET_NETWORK_ID = `${pkg} set wallet networkId`;
 
 export const connectWalletAction = (wallet?: string) => ({
   type: CONNECT_WALLET,
-  payload: { wallet }
+  payload: { wallet },
 });
 export const changeNetworkAction = (networkId: string, wallet?: Wallets) => ({
   type: CHANGE_NETWORK,
@@ -23,7 +23,8 @@ export const disconnectAction = {
   type: DISCONNECT_WALLET,
 };
 export const newConnectionAction = (wallet: Wallets) => ({
-  type: NEW_WALLET_CONNECTION
+  type: NEW_WALLET_CONNECTION,
+  payload: { wallet },
 });
 export const setNetworkIdAction = (networkId: string) => ({
   type: SET_WALLET_NETWORK_ID,

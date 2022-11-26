@@ -61,7 +61,8 @@ export const connectWalletFlow = async (
       dispatch(
         walletConnect({
           wallet,
-          address: "0xc8cb5c7ebe866f7bf64246075d53cf4f09b48e9e", // address as string,
+          address:
+            /*  "0xc8cb5c7ebe866f7bf64246075d53cf4f09b48e9e", // */ address as string,
           networkId: String(networkId),
           balance: Number(balance),
           symbol: network?.symbol as string,

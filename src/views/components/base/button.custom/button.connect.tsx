@@ -11,11 +11,10 @@ import {
   setDialogComponentAction,
   showDialogAction,
 } from "application/flows/actions/dialogbox.action";
-import { useAppDispatch } from "application/hook";
+import { useAppDispatch, useAppSelector } from "application/hook";
 import { Wallets } from "utils/types";
 import NetworkSelector from "views/components/views/network.button/network.selector";
 import WalletSelector from "views/components/views/network.button/wallet.selector";
-import { useSelector } from "react-redux";
 import { selectWallet } from "application/reducers.slices/wallet.core";
 
 const useStyle = makeStyles(() => ({
@@ -32,7 +31,7 @@ const useStyle = makeStyles(() => ({
 export default function ConnectButton() {
   const classes = useStyle(),
     dispatch = useAppDispatch();
-  const { connecting } = useSelector(selectWallet);
+  const { connecting } = useAppSelector(selectWallet);
   function onWalletSelect(wallet: Wallets) {
     dispatch(newConnectionAction(wallet));
   }

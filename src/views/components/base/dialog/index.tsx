@@ -2,9 +2,8 @@ import React from "react";
 import classNames from "classnames";
 import { Dialog, IconButton } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useSelector } from "react-redux";
 import { selectDialog } from "application/reducers.slices/dialog.core";
-import { useAppDispatch } from "application/hook";
+import { useAppDispatch, useAppSelector } from "application/hook";
 import { hideDialogBoxAction } from "application/flows/actions/dialogbox.action";
 import { ArrowBack, Close } from "@mui/icons-material";
 const styles = makeStyles(() => ({
@@ -66,7 +65,7 @@ export default function CustomDialog() {
       closeButton,
       closeButtonComponent: TopComponent,
       backArrow,
-    } = useSelector(selectDialog),
+    } = useAppSelector(selectDialog),
     dispatch = useAppDispatch(),
     handleOnClose = (
       event: Event,

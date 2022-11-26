@@ -10,12 +10,22 @@ const useStyle = makeStyles(() => ({
     justifyContent: "center",
     flexDirection: "column",
   },
-  header: {},
-  subheader: {},
+  header: {
+    fontWeight: 500,
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  subheader: {
+    fontWeight: 400,
+    fontSize: 16,
+    marginBottom: 20,
+  },
   info: {
     display: "flex",
     alignItems: "center",
     color: "#D9AA0F",
+    marginBottom: 20,
+    marginTop: 10,
   },
   btnContainer: {
     marginTop: 20,

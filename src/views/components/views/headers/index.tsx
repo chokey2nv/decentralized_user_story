@@ -3,11 +3,11 @@ import { AppBar, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Container } from "@mui/system";
 import { selectWallet } from "application/reducers.slices/wallet.core";
-import { useSelector } from "react-redux";
 import HeaderConnected from "./header.connected";
 import ButtonDropdown from "views/components/base/button.custom/button.dropdown";
 import DappsDropdown from "./Dapps";
 import HeaderDisConnected from "./header.disconnected";
+import { useAppSelector } from "application/hook";
 const StyledRoot = styled("div")(() => ({
   display: "flex",
   padding: 10,
@@ -39,7 +39,7 @@ const StyledConnectionContainer = styled("div")(() => ({
   alignItems: "center",
 }));
 const Header = () => {
-  const { address } = useSelector(selectWallet),
+  const { address } = useAppSelector(selectWallet),
     [appBtnAnchorEl, setAppBtnAnchorEl] = useState<Element | undefined>(
       undefined
     ),

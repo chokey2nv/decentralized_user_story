@@ -5,20 +5,21 @@ import React from "react";
 import { StatComponentProps } from ".";
 import StatBase from "./stat.base/index";
 
-export default function TransactionCount({ dappInfo }: StatComponentProps) {
+export default function HighestTrade({ dappName, dappInfo }: StatComponentProps) {
   const { networkId, address } = useAppSelector(selectWallet);
-  const { isSearchingHx, txCounts, txCountPercent } =
+  const { isSearchingHx, highestTrade } =
     useAppSelector(selectWalletStat)[networkId]?.[address] || {};
+  const token = highestTrade
+    ? `${highestTrade?.amount} ${highestTrade?.symbol}`
+    : "0 X-Token";
+
   return (
     <StatBase
+      statString={token}
       dappInfo={dappInfo}
-      statString={`${txCounts || "X"} Wallet Transactions`}
-      header={"TRANSACTION MAESTRO!"}
-      subheader={`You have more transactions than ${Number(
-        Math.round(Number(txCountPercent || 0))
-      ).toPrecision(4)}% of DeFi users.`}
-      highlight={Number(txCountPercent || 0) > 20 ? "Wow!" : undefined}
-      imageSrc={"/assets/stats/tx.svg"}
+      header="HIGHEST TRADE"
+      subheader={`${token} was recorded as your hughest trade on PancakeSwap. Living Large!`}
+      imageSrc={`/assets/stats/${dappName}/highesttrade.svg`}
       searching={Boolean(isSearchingHx)}
     />
   );
