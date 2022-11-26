@@ -49,6 +49,8 @@ export const WALLETS: Wallet[] = [
     name: "trustWallet",
   },
 ];
+const ethereumBlockSize = 380;
+const binanceBlockSize = 68250;
 export const NETWORKS: Network[] = [
   {
     label: "Binance",
@@ -57,6 +59,7 @@ export const NETWORKS: Network[] = [
     symbol: "BNB",
     decimals: 18,
     explorer: BSCExplorer("https://bscscan.com"),
+    blockTxs: 563, //1477000 / 68400 * 14
   },
   {
     label: "Binance Test",
@@ -65,6 +68,7 @@ export const NETWORKS: Network[] = [
     symbol: "BNB",
     decimals: 18,
     explorer: BSCExplorer("https://testnet.bscscan.com"),
+    blockTxs: 563, //1477000 / 68400 * 14
   },
   {
     label: "Polygon",
@@ -73,6 +77,7 @@ export const NETWORKS: Network[] = [
     name: "polygon",
     decimals: 18,
     explorer: PolygonExplorer("https://polygonscan.com"),
+    blockTxs: 635, //3106458 / 68400 * 14
   },
   {
     label: "Polygon Test",
@@ -81,6 +86,7 @@ export const NETWORKS: Network[] = [
     name: "polygon",
     decimals: 18,
     explorer: PolygonExplorer("https://mumbai.polygonscan.com`"),
+    blockTxs: 635, //3106458 / 68400 * 14
   },
 ];
 export const NETWORK_IDS: Record<string, SupportedNetworkId> = {

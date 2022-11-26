@@ -11,7 +11,7 @@ export const walletTxCountFlow = async (
   try {
     const { web3 } = infra || {};
     const { networkId, address } = (getState as AppStore)().wallet;
-    const count = await (web3 as Web3).eth.getTransactionCount(address);
+    const count = await web3.eth.getTransactionCount(address);
     dispatch(
       updateTxCount({
         networkId,

@@ -1,11 +1,12 @@
 import { NETWORKS } from "utils/constance";
 import { Wallets } from "utils/types";
+import Web3 from "web3";
 import getWeb3 from "./getWeb3";
 
 export interface Infra {
   supportedIds: string[];
   log: typeof console.log;
-  web3: any | undefined;
+  web3: Web3;
   accounts: string[] | undefined;
   wallet: Wallets;
 }

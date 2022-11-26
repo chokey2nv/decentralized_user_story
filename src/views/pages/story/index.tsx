@@ -1,26 +1,27 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { appRouteNames } from "utils/route.names";
-import { useAppDispatch } from "application/hook";
+import { useAppDispatch, useAppSelector } from "application/hook";
 import {
   generateStoryAction,
   IGenerateStoryActionPayload,
 } from "application/flows/actions/wallet.stat.action";
 import { DappName } from "utils/types";
 import { ALL_DAPPS } from "utils/constance";
-import { useSelector } from "react-redux";
 import { selectWallet } from "application/reducers.slices/wallet.core";
 import { selectWalletStat } from "application/reducers.slices/wallet.stat.core";
 import UserHistoryBox from "./history.box";
+import SearchHeader from "./history.box/search.header";
+import { Grid } from "@mui/material";
+import UserStats from "./stats";
 
 export default function Story() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { address, networkId, connecting } = useSelector(selectWallet);
+  const { address, networkId, connecting } = useAppSelector(selectWallet);
   const { blockMetadata: block, isSearchingHx } =
-    useSelector(selectWalletStat)?.[networkId]?.[address] || {};
-  console.log(isSearchingHx);
+    useAppSelector(selectWalletStat)?.[networkId]?.[address] || {};
   const [params, setParams] = useState<Partial<IGenerateStoryActionPayload>>({
     username: undefined,
     dappName: undefined,
@@ -67,14 +68,15 @@ export default function Story() {
   return (
     <div>
       <h1>{dapp?.label}</h1>
-      <div>Latest Block: {block?.latestBlock}</div>
-      <div>
-        Block History:{" "}
-        {block?.latestBlock ? `${block.fromBlock} to ${block.toBlock}` : ""}
-      </div>
-      <div>
-        <UserHistoryBox />
-      </div>
+      <SearchHeader />
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={3} md={3} lg={3} xl={3}>
+          <UserHistoryBox />
+        </Grid>
+        <Grid item xs={12} sm={9} md={9} lg={9} xl={9}>
+          <UserStats />
+        </Grid>
+      </Grid>
     </div>
   );
 }

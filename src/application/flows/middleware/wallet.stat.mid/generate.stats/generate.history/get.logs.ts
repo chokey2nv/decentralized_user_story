@@ -23,7 +23,6 @@ export function blockLogs(web3: Web3, accountAddress: string) {
           ...receipt,
           block,
         });
-        console.log(txs);
       }
     }
     return txs;

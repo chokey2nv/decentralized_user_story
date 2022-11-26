@@ -34,6 +34,7 @@ export interface Network {
   name: string;
   decimals: number;
   explorer: NetowrkExplorer;
+  blockTxs: number;
 }
 export interface MiddlewareHangle {
   infra: Infra;
